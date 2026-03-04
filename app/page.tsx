@@ -35,7 +35,7 @@ export default function Home() {
         </h2>
         <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800 mb-4 leading-tight">
           E-Modul Biologi <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-pastel-dark to-pastel-blue">
+          <span className="text-transparent bg-clip-text bg-linear-to-r from-pastel-dark to-pastel-blue">
             Berbasis OE-C
           </span>
         </h1>
