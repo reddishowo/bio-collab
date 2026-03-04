@@ -1,65 +1,62 @@
-import Image from "next/image";
+import Link from 'next/link';
+import { Leaf, Dna, Microscope, ArrowRight } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-pastel-light flex flex-col items-center justify-center relative overflow-hidden text-slate-800">
+      
+      {/* Background Ornaments (Aksen Biologi) */}
+      <div className="absolute top-10 left-10 text-pastel-blue opacity-20 transform -rotate-45">
+        <Dna size={120} />
+      </div>
+      <div className="absolute bottom-10 right-10 text-pastel-green opacity-20">
+        <Leaf size={150} />
+      </div>
+      <div className="absolute top-1/2 right-20 text-pastel-blue opacity-10">
+        <Microscope size={100} />
+      </div>
+
+      {/* Main Content Container */}
+      <div className="z-10 bg-white/60 backdrop-blur-md p-10 md:p-16 rounded-3xl shadow-xl border border-white max-w-3xl text-center mx-4">
+        
+        {/* Logo / Icon Header */}
+        <div className="flex justify-center items-center space-x-4 mb-6">
+          <div className="bg-pastel-blue p-3 rounded-2xl text-white shadow-lg shadow-pastel-blue/40">
+            <Microscope size={40} />
+          </div>
+          <div className="bg-pastel-green p-3 rounded-2xl text-white shadow-lg shadow-pastel-green/40">
+            <Leaf size={40} />
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Title Section */}
+        <h2 className="text-sm md:text-md font-semibold text-pastel-dark uppercase tracking-widest mb-2">
+          Media Pembelajaran Interaktif
+        </h2>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-800 mb-4 leading-tight">
+          E-Modul Biologi <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-pastel-dark to-pastel-blue">
+            Berbasis OE-C
+          </span>
+        </h1>
+        <p className="text-slate-600 mb-8 max-w-xl mx-auto text-lg leading-relaxed">
+          Tingkatkan kemampuan berpikir kreatif dan kolaborasi melalui pendekatan Open-Ended Collaboration (OE-C).
+        </p>
+
+        {/* Action Button */}
+        <Link href="/pendahuluan">
+          <button className="group relative inline-flex items-center justify-center px-8 py-4 font-bold text-white transition-all duration-200 bg-pastel-dark rounded-full hover:bg-blue-600 hover:shadow-lg hover:shadow-pastel-blue/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pastel-dark">
+            <span className="mr-2 text-lg">Mulai Belajar</span>
+            <ArrowRight className="group-hover:translate-x-1 transition-transform" size={20} />
+          </button>
+        </Link>
+        
+        {/* Developer Info */}
+        <div className="mt-12 text-sm text-slate-500 font-medium">
+          <p>Dikembangkan oleh Nafisa Syafaqoh</p>
         </div>
-      </main>
-    </div>
+
+      </div>
+    </main>
   );
 }
