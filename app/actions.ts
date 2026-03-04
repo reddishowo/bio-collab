@@ -244,3 +244,46 @@ export async function getGroupData(groupCode: string): Promise<GroupData | null>
     return null;
   }
 }
+
+// --- Tipe Data untuk Evaluasi ---
+export interface EvaluationData {
+  skorPengetahuan: number;      // Untuk individu
+  evaluasiKelompok?: string;  // Uraian, hanya untuk ketua (opsional)
+}
+
+// --- 7. SIMPAN HASIL EVALUASI INDIVIDU & KELOMPOK ---
+export async function saveEvaluation(
+  groupCode: string, 
+  userName: string, 
+  evalData: EvaluationData
+) {
+  try {
+    const client = await clientPromise;
+    const db = client.db(DB_NAME);
+    const evaluationsCollection = db.collection('evaluations');
+    
+    await evaluationsCollection.updateOne(
+      { groupCode, userName }, // Kunci unik per siswa
+      { 
+        $set: {
+          ...evalData,
+          submittedAt: new Date()
+        }
+      },
+      { upsert: true }
+    );
+
+    // Jika yang submit adalah ketua dan ada eval kelompok, simpan juga di data group
+    if (evalData.evaluasiKelompok) {
+      await db.collection('groups').updateOne(
+        { groupCode },
+        { $set: { "evaluasiTim": evalData.evaluasiKelompok } }
+      );
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error saveEvaluation:", error);
+    return { success: false };
+  }
+}
