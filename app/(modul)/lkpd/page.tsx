@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Send, Save, MessageSquare, FileText, Loader2, Check, Bug, Dna, Sprout } from "lucide-react";
+import { Send, Save, MessageSquare, FileText, Loader2, Check, Bug, Dna, Sprout, LogOut } from "lucide-react";
 import { createGroup, joinGroup, getChatMessages, sendChatMessage, saveLKPD, getGroupData, type GroupData, type ChatMessage, type LKPDItem } from "@/app/actions";
+import { useGroupSession } from "@/components/GroupContext"; // <--- TAMBAHKAN INI
 
-// Tipe data untuk topik yang valid
 type Topic = 'virus' | 'bakteri' | 'jamur';
 
 export default function LkpdWorkspacePage() {
-  // --- STATE LOGIN/JOIN ---
+  const { userState, loginSession, logoutSession } = useGroupSession(); // <--- PANGGIL CONTEXT
+
   const [activeTab, setActiveTab] = useState<"buat" | "gabung">("buat");
   const [name, setName] = useState("");
   const [groupName, setGroupName] = useState("");
@@ -17,17 +18,13 @@ export default function LkpdWorkspacePage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // --- STATE WORKSPACE ---
   const [workspaceTab, setWorkspaceTab] = useState<"diskusi" | "lkpd">("diskusi");
-  
-  // STATE BARU: Materi yang sedang dipilih
   const [currentTopic, setCurrentTopic] = useState<Topic>("virus");
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
 
-  // State Form Jawaban LKPD
   const [lkpdData, setLkpdData] = useState<LKPDItem>({
     tugas: "", inkubasi: "", iluminasi: "", verifikasi: ""
   });
@@ -37,17 +34,35 @@ export default function LkpdWorkspacePage() {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const currentGroupCode = joinedGroup?.groupCode ?? "";
 
-  // Fungsi helper untuk mengambil data LKPD spesifik dari database
+  // ==========================================
+  // AUTO-LOGIN LOGIC
+  // ==========================================
+  useEffect(() => {
+    // Jika ada session di LocalStorage tapi state joinedGroup masih kosong, lakukan auto-join
+    if (userState && !joinedGroup) {
+      const autoJoin = async () => {
+        setLoading(true);
+        // Panggil database untuk mendapatkan data terbaru berdasarkan session yang tersimpan
+        const groupData = await getGroupData(userState.groupCode);
+        
+        if (groupData) {
+          setJoinedGroup(groupData);
+          setName(userState.userName); // Set nama untuk chat sender
+        } else {
+          // Jika kelompok sudah tidak ada di DB, hapus sessionnya
+          logoutSession();
+        }
+        setLoading(false);
+      };
+      autoJoin();
+    }
+  }, [userState, joinedGroup]);
+
+  // --- EFEK: LOAD DATA AWAL & GANTI TOPIK ---
   const loadLKPDByTopic = async (topic: Topic) => {
     if (!currentGroupCode) return;
-    
-    // Ambil data terbaru dari server agar sinkron
     const groupData = await getGroupData(currentGroupCode);
-    
-    // Ambil data spesifik berdasarkan topik (virus/bakteri/jamur)
-    // Gunakan Optional Chaining (?.) dan Nullish Coalescing (??) untuk keamanan
     const data = groupData?.lkpd?.[topic];
-    
     setLkpdData({
       tugas: data?.tugas ?? "",
       inkubasi: data?.inkubasi ?? "",
@@ -56,30 +71,23 @@ export default function LkpdWorkspacePage() {
     });
   };
 
-  // --- EFEK: LOAD DATA AWAL ---
   useEffect(() => {
     if (!currentGroupCode) return;
-
     const initData = async () => {
-      // 1. Load Chat
       const msgs = await getChatMessages(currentGroupCode);
       setMessages(msgs);
-      // 2. Load LKPD sesuai topik awal (virus)
       await loadLKPDByTopic(currentTopic);
     };
-
     initData();
   }, [currentGroupCode]);
 
-  // --- EFEK: GANTI TOPIK ---
-  // Setiap kali user ganti Tab Topik (Virus -> Bakteri), load data baru
   useEffect(() => {
     if (currentGroupCode) {
       loadLKPDByTopic(currentTopic);
     }
   }, [currentTopic, currentGroupCode]);
 
-  // --- EFEK: POLLING CHAT (Interval) ---
+  // --- EFEK: POLLING CHAT ---
   useEffect(() => {
     if (!currentGroupCode) return;
     const interval = setInterval(async () => {
@@ -89,7 +97,6 @@ export default function LkpdWorkspacePage() {
     return () => clearInterval(interval);
   }, [currentGroupCode]);
 
-  // Scroll Chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -100,7 +107,10 @@ export default function LkpdWorkspacePage() {
     e.preventDefault();
     setLoading(true);
     const result = await createGroup(groupName, name);
-    if (result.success) setJoinedGroup(result.group as GroupData);
+    if (result.success) {
+      setJoinedGroup(result.group as GroupData);
+      loginSession(name, result.group.groupCode, result.group.groupName); // <--- SIMPAN SESSION
+    }
     else setErrorMsg(result.message || "Gagal");
     setLoading(false);
   };
@@ -111,17 +121,21 @@ export default function LkpdWorkspacePage() {
     const result = await joinGroup(code, name);
     if (result.success) {
       setJoinedGroup(result.group as GroupData);
+      loginSession(name, result.group.groupCode, result.group.groupName); // <--- SIMPAN SESSION
     }
     else setErrorMsg(result.message || "Gagal");
     setLoading(false);
   };
 
   // --- HANDLERS WORKSPACE ---
+  // ... (TETAP SAMA SEPERTI SEBELUMNYA)
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !currentGroupCode) return;
     setIsSending(true);
-    await sendChatMessage(currentGroupCode, name, newMessage);
+    // PENTING: Gunakan userState.userName untuk jaga-jaga jika state 'name' hilang
+    const sender = userState?.userName || name; 
+    await sendChatMessage(currentGroupCode, sender, newMessage);
     setNewMessage("");
     setIsSending(false);
     const msgs = await getChatMessages(currentGroupCode);
@@ -131,15 +145,22 @@ export default function LkpdWorkspacePage() {
   const handleSaveLKPD = async () => {
     if (!currentGroupCode) return;
     setIsSaving(true);
-    // Simpan dengan mengirimkan topik saat ini (currentTopic)
     await saveLKPD(currentGroupCode, currentTopic, lkpdData);
     setIsSaving(false);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
   };
 
+  const handleLogout = () => {
+    if(confirm("Apakah Anda yakin ingin keluar dari kelompok ini di perangkat ini?")) {
+      logoutSession();
+      setJoinedGroup(null);
+      setName("");
+    }
+  };
 
-  // ================= TAMPILAN WORKSPACE (LOGIN SUKSES) =================
+
+  // ================= TAMPILAN WORKSPACE (JIKA SUDAH LOGIN / SESSION ADA) =================
   if (joinedGroup && currentGroupCode) {
     const members = joinedGroup.members ?? [];
 
@@ -157,15 +178,25 @@ export default function LkpdWorkspacePage() {
               <span className="text-[10px] text-slate-400 font-medium">{members.length} Anggota</span>
             </div>
           </div>
-          <div className="flex -space-x-2">
-            {members.slice(0, 3).map((member: string, i: number) => (
-              <div key={i} className="w-7 h-7 rounded-full bg-pastel-blue text-white flex items-center justify-center text-[10px] font-bold border-2 border-white shadow-sm">
-                {member.charAt(0).toUpperCase()}
-              </div>
-            ))}
+          
+          <div className="flex items-center gap-4">
+             {/* Avatar Stack */}
+            <div className="flex -space-x-2">
+              {members.slice(0, 3).map((member: string, i: number) => (
+                <div key={i} className="w-7 h-7 rounded-full bg-pastel-blue text-white flex items-center justify-center text-[10px] font-bold border-2 border-white shadow-sm" title={member}>
+                  {member.charAt(0).toUpperCase()}
+                </div>
+              ))}
+            </div>
+            
+            {/* Tombol Logout Mobile/Desktop */}
+            <button onClick={handleLogout} className="text-red-400 hover:text-red-600 bg-red-50 p-2 rounded-lg transition-colors" title="Keluar Kelompok">
+              <LogOut size={16} />
+            </button>
           </div>
         </div>
 
+        {/* ... (KODE TAB NAVIGASI, DISKUSI, DAN LKPD TETAP SAMA SEPERTI SEBELUMNYA) ... */}
         {/* TAB UTAMA (Diskusi vs LKPD) */}
         <div className="flex bg-slate-50 border-b border-slate-100 shrink-0">
           <button
@@ -193,7 +224,7 @@ export default function LkpdWorkspacePage() {
                 </div>
               ) : (
                 messages.map((msg, idx) => {
-                  const isMe = msg.userName === name;
+                  const isMe = msg.userName === (userState?.userName || name);
                   return (
                     <div key={idx} className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}>
                       <div className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${isMe ? "bg-pastel-dark text-white rounded-br-sm" : "bg-white text-slate-700 border border-slate-100 rounded-bl-sm"}`}>
@@ -250,10 +281,9 @@ export default function LkpdWorkspacePage() {
               })}
             </div>
 
-            {/* FORM LKPD (Isinya berubah sesuai materi yang dipilih) */}
+            {/* FORM LKPD */}
             <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
               
-              {/* Judul Form Dinamis */}
               <div className="bg-blue-50 p-3 rounded-lg border border-blue-100 text-blue-800 text-xs font-medium flex items-center gap-2 mb-4">
                 <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></div>
                 Anda sedang mengerjakan LKPD: <span className="font-bold uppercase">{currentTopic}</span>
@@ -330,9 +360,20 @@ export default function LkpdWorkspacePage() {
     );
   }
 
-  // TAMPILAN LOGIN (Tetap Sama)
+  // JIKA SEDANG LOADING (Mengecek Session Auto-Login)
+  if (loading && userState && !joinedGroup) {
+    return (
+      <div className="flex flex-col items-center justify-center h-[50vh] text-pastel-dark">
+        <Loader2 className="animate-spin mb-4" size={40} />
+        <p className="font-bold">Memuat ruang kerja Anda...</p>
+      </div>
+    );
+  }
+
+  // ================= TAMPILAN FORMULIR LOGIN/JOIN =================
   return (
     <div className="max-w-md mx-auto animate-in fade-in zoom-in-95 duration-500 mt-4 md:mt-10">
+      {/* ... (KODE FORM LOGIN TETAP SAMA SEPERTI SEBELUMNYA) ... */}
       <div className="text-center mb-6">
         <h1 className="text-2xl md:text-3xl font-extrabold text-slate-800">Ruang Kolaborasi</h1>
         <p className="text-slate-500 text-sm mt-1">Sintaks 3: Pembentukan Tim</p>
