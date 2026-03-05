@@ -5,6 +5,7 @@ import { useGroupSession } from "@/components/GroupContext";
 import { saveEvaluation, getGroupData } from "@/app/actions";
 import { Loader2, CheckCircle, ShieldAlert, ArrowRight, Crown } from "lucide-react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 // --- DATA KUIS INDIVIDU (DITAMBAH) ---
 const quizQuestions = [
@@ -166,18 +167,24 @@ export default function EvaluasiPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-12">
-        {/* Bagian 1: Evaluasi Pengetahuan (Semua Anggota) */}
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-pastel-blue/20">
           <h2 className="text-2xl font-bold text-slate-800 border-b border-slate-200 pb-4 mb-6">
             1. Evaluasi Pengetahuan (Individu)
           </h2>
           <div className="space-y-8">
             {quizQuestions.map((q, index) => (
-              <div key={q.id}>
+              <motion.div 
+                key={q.id}
+                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}
+              >
                 <p className="font-bold text-slate-700 mb-4">{index + 1}. {q.question}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {q.options.map(option => (
-                    <label key={option} className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all cursor-pointer ${quizAnswers[q.id] === option ? 'border-pastel-dark bg-pastel-light/50 shadow-sm' : 'border-slate-200 bg-slate-50 hover:border-pastel-blue'}`}>
+                    <motion.label 
+                      key={option} 
+                      whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                      className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all cursor-pointer ${quizAnswers[q.id] === option ? 'border-pastel-dark bg-pastel-light/50 shadow-sm' : 'border-slate-200 bg-slate-50 hover:border-pastel-blue'}`}
+                    >
                       <input 
                         type="radio" name={q.id} value={option}
                         checked={quizAnswers[q.id] === option}
@@ -185,10 +192,10 @@ export default function EvaluasiPage() {
                         className="w-5 h-5 accent-pastel-dark"
                       />
                       <span className="font-medium text-slate-600">{option}</span>
-                    </label>
+                    </motion.label>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
