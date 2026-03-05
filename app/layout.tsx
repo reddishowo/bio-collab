@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
-import { BookOpenCheck } from "lucide-react";
+import { BookOpenCheck, LogOut } from "lucide-react";
+import { logoutTeacher } from "@/app/auth-actions"; // Import fungsi logout
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -21,10 +22,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
               <BookOpenCheck size={28} />
-              <h1 className="text-xl font-bold tracking-wide">BioCollab <span className="font-light">| Teacher Panel</span></h1>
+              <h1 className="text-xl font-bold tracking-wide">BioCollab <span className="font-light hidden md:inline">| Teacher Panel</span></h1>
             </Link>
-            <div className="text-sm bg-white/20 px-4 py-1.5 rounded-full font-medium">
-              Mode Monitoring
+            
+            <div className="flex items-center gap-4">
+              <div className="text-xs md:text-sm bg-white/20 px-4 py-1.5 rounded-full font-medium hidden sm:block">
+                Mode Monitoring
+              </div>
+              
+              {/* TOMBOL LOGOUT */}
+              <form action={logoutTeacher}>
+                <button type="submit" className="flex items-center gap-2 text-sm bg-red-500/80 hover:bg-red-500 px-4 py-1.5 rounded-full transition-colors font-medium" title="Keluar">
+                  <LogOut size={16} /> <span className="hidden sm:inline">Keluar</span>
+                </button>
+              </form>
             </div>
           </div>
         </header>
