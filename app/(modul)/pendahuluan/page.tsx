@@ -28,9 +28,8 @@ export default function PendahuluanPage() {
             <h2 className="text-xl font-bold">Tujuan Pembelajaran</h2>
           </div>
           <ul className="text-slate-600 leading-relaxed list-disc list-inside space-y-2">
-            <li>Memahami konsep dasar materi (isi sesuai subbab).</li>
-            <li>Mengidentifikasi fenomena nyata yang terjadi di lingkungan.</li>
-            <li>Merumuskan ide dan solusi secara kolaboratif bersama kelompok.</li>
+            <li>Peserta didik mampu memahami peranan bakteri dalam kehidupan.</li>
+            <li>Peserta didik mampu memahami pemanfaatan bioteknologi dalam berbagai bidang kehidupan</li>
           </ul>
         </div>
       </div>
@@ -49,7 +48,7 @@ export default function PendahuluanPage() {
       <hr className="border-pastel-blue/20" />
 
       {/* TAHAP 1 OE-C: MENGORIENTASI SISWA */}
-      <div className="bg-gradient-to-br from-pastel-dark to-pastel-blue p-8 rounded-3xl shadow-lg text-white">
+      <div className="bg-linear-to-br from-pastel-dark to-pastel-blue p-8 rounded-3xl shadow-lg text-white">
         <div className="inline-block bg-white/20 px-4 py-1 rounded-full text-sm font-semibold tracking-wide mb-4">
           Tahap 1: Mengorientasi Siswa
         </div>

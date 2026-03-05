@@ -3,12 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import { Send, Save, MessageSquare, FileText, Loader2, Check, Bug, Dna, Sprout, LogOut } from "lucide-react";
 import { createGroup, joinGroup, getChatMessages, sendChatMessage, saveLKPD, getGroupData, type GroupData, type ChatMessage, type LKPDItem } from "@/app/actions";
-import { useGroupSession } from "@/components/GroupContext"; // <--- TAMBAHKAN INI
+import { useGroupSession } from "@/components/GroupContext"; 
 
-type Topic = 'virus' | 'bakteri' | 'jamur';
+type Topic = 'bakteri';
 
 export default function LkpdWorkspacePage() {
-  const { userState, loginSession, logoutSession } = useGroupSession(); // <--- PANGGIL CONTEXT
+  const { userState, loginSession, logoutSession } = useGroupSession(); 
 
   const [activeTab, setActiveTab] = useState<"buat" | "gabung">("buat");
   const [name, setName] = useState("");
@@ -19,7 +19,7 @@ export default function LkpdWorkspacePage() {
   const [errorMsg, setErrorMsg] = useState("");
 
   const [workspaceTab, setWorkspaceTab] = useState<"diskusi" | "lkpd">("diskusi");
-  const [currentTopic, setCurrentTopic] = useState<Topic>("virus");
+  const [currentTopic, setCurrentTopic] = useState<Topic>("bakteri");
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -255,12 +255,10 @@ export default function LkpdWorkspacePage() {
         {workspaceTab === "lkpd" && (
           <div className="flex-1 flex flex-col bg-white overflow-hidden">
             
-            {/* SUB-TAB PILIH MATERI (Virus / Bakteri / Jamur) */}
+            {/* SUB-TAB PILIH MATERI (Bakteri) */}
             <div className="flex px-4 py-3 gap-2 bg-white border-b border-slate-100 overflow-x-auto no-scrollbar shrink-0">
               {[
-                { id: 'virus', label: 'Virus', icon: Bug },
                 { id: 'bakteri', label: 'Bakteri', icon: Dna },
-                { id: 'jamur', label: 'Jamur', icon: Sprout }
               ].map((item) => {
                 const isActive = currentTopic === item.id;
                 const Icon = item.icon;

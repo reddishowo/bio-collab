@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image'; 
 import { Leaf, Dna, Microscope, ArrowRight } from 'lucide-react';
 
 export default function Home() {
@@ -19,14 +20,16 @@ export default function Home() {
       {/* Main Content Container */}
       <div className="z-10 bg-white/60 backdrop-blur-md p-10 md:p-16 rounded-3xl shadow-xl border border-white max-w-3xl text-center mx-4">
         
-        {/* Logo / Icon Header */}
-        <div className="flex justify-center items-center space-x-4 mb-6">
-          <div className="bg-pastel-blue p-3 rounded-2xl text-white shadow-lg shadow-pastel-blue/40">
-            <Microscope size={40} />
-          </div>
-          <div className="bg-pastel-green p-3 rounded-2xl text-white shadow-lg shadow-pastel-green/40">
-            <Leaf size={40} />
-          </div>
+        {/* Logo / Icon Header (Telah diubah menjadi 1 logo PNG) */}
+        <div className="flex justify-center items-center mb-8">
+          <Image 
+            src="/Lambang-UM.png" // Sesuaikan dengan nama file di folder public Anda
+            alt="Logo Universitas Negeri Malang"
+            width={120} // Sesuaikan lebar logo
+            height={120} // Sesuaikan tinggi logo
+            className="object-contain drop-shadow-md hover:scale-105 transition-transform duration-300"
+            priority
+          />
         </div>
 
         {/* Title Section */}

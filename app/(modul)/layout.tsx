@@ -11,11 +11,9 @@ function SidebarContent({ setIsSidebarOpen }: { setIsSidebarOpen: (v: boolean) =
   const { userState, logoutSession } = useGroupSession();
   
   const daftarMateri = [
-    { id: "virus", title: "Subbab 1: Virus", icon: Bug },
-    { id: "bakteri", title: "Subbab 2: Bakteri", icon: Dna },
-    { id: "jamur", title: "Subbab 3: Jamur", icon: Sprout },
+    { id: "bakteri", title: "Bakteri", icon: Dna },
   ];
-
+  
   return (
     <aside className="h-full flex flex-col w-64 bg-white border-r border-pastel-blue/30 shadow-xl md:shadow-sm">
       <div className="p-6 border-b border-pastel-blue/20 shrink-0">
