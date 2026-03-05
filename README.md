@@ -198,8 +198,3 @@ Contoh struktur data yang dibaca aplikasi:
 3. Jalankan app: `npm run start`.
 
 ---
-
-Jika ingin, README ini bisa saya lanjutkan dengan:
-- diagram arsitektur (flow auth + alur data),
-- panduan backup/restore data MongoDB,
-- section troubleshooting berbasis error umum saat deploy.
