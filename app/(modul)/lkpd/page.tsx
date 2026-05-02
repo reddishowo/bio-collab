@@ -498,14 +498,14 @@ function LkpdContent({
                         alt="Apel sebagai contoh makanan segar"
                         width={600}
                         height={401}
-                        className="h-44 w-full rounded-xl object-cover shadow-sm"
+                        className="h-44 w-full rounded-xl bg-white/60 object-contain shadow-sm"
                       />
                       <Image
                         src="/roti_jamur.jpeg"
                         alt="Roti berjamur sebagai contoh makanan yang membusuk"
                         width={571}
                         height={366}
-                        className="h-44 w-full rounded-xl object-cover shadow-sm"
+                        className="h-44 w-full rounded-xl bg-white/60 object-contain shadow-sm"
                       />
                     </div>
                   }
@@ -531,7 +531,7 @@ function LkpdContent({
                       alt="Pedagang memegang roti berjamur"
                       width={974}
                       height={1024}
-                      className="mb-4 max-h-80 w-full rounded-xl object-cover object-center shadow-sm"
+                      className="mb-4 h-80 w-full rounded-xl bg-white/60 object-contain shadow-sm"
                     />
                   }
                 >
