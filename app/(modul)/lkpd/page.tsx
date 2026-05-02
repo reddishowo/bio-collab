@@ -1,35 +1,29 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   BookOpen,
   Check,
   ClipboardList,
   Dna,
-  FileText,
   Lightbulb,
   Loader2,
   LogOut,
-  MessageSquare,
   Save,
-  Send,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   createGroup,
-  getChatMessages,
   getGroupData,
   joinGroup,
   saveLKPD,
-  sendChatMessage,
-  type ChatMessage,
   type GroupData,
   type LKPDItem,
 } from "@/app/actions";
 import { useGroupSession } from "@/components/GroupContext";
 
 type Topic = "bakteri";
-type WorkspaceTab = "diskusi" | "lkpd";
 type MeetingId = "p1" | "p2" | "p3" | "p4";
 type AnswerMap = Record<string, string>;
 type ExtendedLKPDItem = LKPDItem & { answers?: AnswerMap };
@@ -72,6 +66,10 @@ const meetings: Array<{
 ];
 
 const cx = (...classes: Array<string | false | null | undefined>) => classes.filter(Boolean).join(" ");
+
+function getMeetingId(value: string | null): MeetingId {
+  return value === "p1" || value === "p2" || value === "p3" || value === "p4" ? value : "p1";
+}
 
 function seedAnswers(data?: ExtendedLKPDItem): AnswerMap {
   if (data?.answers) return data.answers;
@@ -332,14 +330,12 @@ function Rubric({ items }: { items: string[] }) {
 
 function LkpdContent({
   activeMeeting,
-  setActiveMeeting,
   joinedGroup,
   currentGroupCode,
   answers,
   onAnswerChange,
 }: {
   activeMeeting: MeetingId;
-  setActiveMeeting: (id: MeetingId) => void;
   joinedGroup: GroupData;
   currentGroupCode: string;
   answers: AnswerMap;
@@ -380,31 +376,9 @@ function LkpdContent({
             melakukan percobaan fermentasi nata de nanas.
           </InfoPanel>
           <InfoPanel icon={<BookOpen size={18} />} title="Petunjuk Penggunaan">
-            Kerjakan LKPD secara berurutan, gunakan tab pertemuan, diskusikan jawaban bersama kelompok, lalu
-            simpan pekerjaan sebelum berpindah perangkat.
+            Kerjakan LKPD secara berurutan melalui menu Pertemuan, diskusikan secara langsung bersama kelompok,
+            lalu simpan pekerjaan sebelum berpindah perangkat.
           </InfoPanel>
-        </div>
-
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {meetings.map((item) => {
-            const isActive = activeMeeting === item.id;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => setActiveMeeting(item.id)}
-                className={cx(
-                  "min-w-40 rounded-2xl border p-3 text-left transition",
-                  isActive
-                    ? "border-pastel-dark bg-pastel-dark text-white shadow-md"
-                    : "border-slate-200 bg-white text-slate-600 hover:border-pastel-blue",
-                )}
-              >
-                <span className="text-[10px] font-black uppercase tracking-wider opacity-70">Pertemuan {item.number}</span>
-                <span className="mt-1 block text-sm font-extrabold">{item.label}</span>
-              </button>
-            );
-          })}
         </div>
 
         <motion.section
@@ -749,6 +723,7 @@ function LkpdContent({
 
 export default function LkpdWorkspacePage() {
   const { userState, loginSession, logoutSession } = useGroupSession();
+  const searchParams = useSearchParams();
 
   const [activeTab, setActiveTab] = useState<"buat" | "gabung">("buat");
   const [name, setName] = useState("");
@@ -758,13 +733,8 @@ export default function LkpdWorkspacePage() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const [workspaceTab, setWorkspaceTab] = useState<WorkspaceTab>("diskusi");
   const [currentTopic] = useState<Topic>("bakteri");
-  const [activeMeeting, setActiveMeeting] = useState<MeetingId>("p1");
-
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [isSending, setIsSending] = useState(false);
+  const activeMeeting = getMeetingId(searchParams.get("meeting"));
 
   const [lkpdData, setLkpdData] = useState<ExtendedLKPDItem>({
     tugas: "",
@@ -776,7 +746,6 @@ export default function LkpdWorkspacePage() {
 
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
   const currentGroupCode = joinedGroup?.groupCode ?? "";
 
   useEffect(() => {
@@ -813,25 +782,10 @@ export default function LkpdWorkspacePage() {
   useEffect(() => {
     if (!currentGroupCode) return;
     const initData = async () => {
-      const msgs = await getChatMessages(currentGroupCode);
-      setMessages(msgs);
       await loadLKPDByTopic(currentTopic);
     };
     initData();
   }, [currentGroupCode, currentTopic, loadLKPDByTopic]);
-
-  useEffect(() => {
-    if (!currentGroupCode) return;
-    const interval = setInterval(async () => {
-      const msgs = await getChatMessages(currentGroupCode);
-      setMessages(msgs);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, [currentGroupCode]);
-
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   const updateAnswer = (id: string, value: string) => {
     setLkpdData((current) => ({
@@ -869,18 +823,6 @@ export default function LkpdWorkspacePage() {
       setErrorMsg(result.message || "Gagal bergabung");
     }
     setLoading(false);
-  };
-
-  const handleSendMessage = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!newMessage.trim() || !currentGroupCode) return;
-    setIsSending(true);
-    const sender = userState?.userName || name;
-    await sendChatMessage(currentGroupCode, sender, newMessage);
-    setNewMessage("");
-    setIsSending(false);
-    const msgs = await getChatMessages(currentGroupCode);
-    setMessages(msgs);
   };
 
   const handleSaveLKPD = async () => {
@@ -959,138 +901,38 @@ export default function LkpdWorkspacePage() {
           </div>
         </div>
 
-        <div className="flex shrink-0 border-b border-slate-100 bg-slate-50">
-          <button
-            onClick={() => setWorkspaceTab("diskusi")}
-            className={cx(
-              "flex flex-1 items-center justify-center gap-2 py-3 text-xs font-bold transition-all md:text-sm",
-              workspaceTab === "diskusi" ? "border-b-2 border-pastel-dark bg-white text-pastel-dark" : "text-slate-400",
-            )}
-          >
-            <MessageSquare size={16} /> Diskusi
-          </button>
-          <button
-            onClick={() => setWorkspaceTab("lkpd")}
-            className={cx(
-              "flex flex-1 items-center justify-center gap-2 py-3 text-xs font-bold transition-all md:text-sm",
-              workspaceTab === "lkpd" ? "border-b-2 border-pastel-dark bg-white text-pastel-dark" : "text-slate-400",
-            )}
-          >
-            <FileText size={16} /> Lembar Kerja
-          </button>
+        <div className="flex shrink-0 items-center gap-2 overflow-x-auto border-b border-slate-100 bg-white px-4 py-3">
+          <span className="inline-flex items-center gap-2 rounded-full bg-pastel-dark px-4 py-2 text-xs font-bold text-white">
+            <Dna size={14} /> Bakteri
+          </span>
+          <span className="text-xs font-semibold text-slate-400">Pilih pertemuan dari sidebar atau tombol bawah</span>
         </div>
 
         <div className="relative flex-1 overflow-hidden bg-[#F8FAFC]">
-          <AnimatePresence mode="wait">
-            {workspaceTab === "diskusi" && (
-              <motion.div
-                key="diskusi"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-                className="absolute inset-0 flex flex-col"
+          <div className="absolute inset-0 flex flex-col bg-white">
+            <LkpdContent
+              activeMeeting={activeMeeting}
+              joinedGroup={joinedGroup}
+              currentGroupCode={currentGroupCode}
+              answers={lkpdData.answers ?? {}}
+              onAnswerChange={updateAnswer}
+            />
+
+            <div className="shrink-0 border-t border-slate-100 bg-white p-3">
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                onClick={handleSaveLKPD}
+                disabled={isSaving}
+                className={cx(
+                  "mx-auto flex w-full max-w-3xl items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition-all duration-300",
+                  saveSuccess ? "bg-green-500 text-white" : "bg-pastel-green text-slate-800 hover:bg-[#a1ceb4]",
+                )}
               >
-                <div className="flex-1 space-y-4 overflow-y-auto p-4">
-                  {messages.length === 0 ? (
-                    <div className="flex h-full flex-col items-center justify-center text-slate-400 opacity-60">
-                      <MessageSquare size={40} className="mb-2" />
-                      <p className="text-sm font-medium">Mulai diskusi kelompokmu!</p>
-                    </div>
-                  ) : (
-                    messages.map((msg, index) => {
-                      const isMe = msg.userName === (userState?.userName || name);
-                      return (
-                        <motion.div
-                          key={msg._id || index}
-                          layout
-                          initial={{ opacity: 0, x: isMe ? 20 : -20, scale: 0.9 }}
-                          animate={{ opacity: 1, x: 0, scale: 1 }}
-                          className={cx("flex flex-col", isMe ? "items-end" : "items-start")}
-                        >
-                          <div
-                            className={cx(
-                              "max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed",
-                              isMe
-                                ? "rounded-br-sm bg-pastel-dark text-white"
-                                : "rounded-bl-sm border border-slate-100 bg-white text-slate-700",
-                            )}
-                          >
-                            {!isMe && <p className="mb-0.5 text-[10px] font-bold text-pastel-dark">{msg.userName}</p>}
-                            {msg.message}
-                          </div>
-                          <span className="mt-1 px-1 text-[9px] text-slate-400">
-                            {new Date(msg.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                          </span>
-                        </motion.div>
-                      );
-                    })
-                  )}
-                  <div ref={chatEndRef} />
-                </div>
-                <div className="shrink-0 border-t border-slate-100 bg-white p-3">
-                  <form onSubmit={handleSendMessage} className="mx-auto flex max-w-3xl gap-2">
-                    <input
-                      type="text"
-                      value={newMessage}
-                      onChange={(event) => setNewMessage(event.target.value)}
-                      placeholder="Ketik pesan..."
-                      className="flex-1 rounded-full bg-slate-100 px-5 py-2.5 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-pastel-blue/50"
-                    />
-                    <button
-                      type="submit"
-                      disabled={isSending || !newMessage.trim()}
-                      className="rounded-full bg-pastel-dark p-2.5 text-white transition-colors hover:bg-blue-600 disabled:opacity-50"
-                    >
-                      <Send size={18} className="ml-0.5" />
-                    </button>
-                  </form>
-                </div>
-              </motion.div>
-            )}
-
-            {workspaceTab === "lkpd" && (
-              <motion.div
-                key="lkpd"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 20 }}
-                transition={{ duration: 0.2 }}
-                className="absolute inset-0 flex flex-col bg-white"
-              >
-                <div className="flex shrink-0 items-center gap-2 overflow-x-auto border-b border-slate-100 bg-white px-4 py-3">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-pastel-dark px-4 py-2 text-xs font-bold text-white">
-                    <Dna size={14} /> Bakteri
-                  </span>
-                  <span className="text-xs font-semibold text-slate-400">4 pertemuan OE-C Learning</span>
-                </div>
-
-                <LkpdContent
-                  activeMeeting={activeMeeting}
-                  setActiveMeeting={setActiveMeeting}
-                  joinedGroup={joinedGroup}
-                  currentGroupCode={currentGroupCode}
-                  answers={lkpdData.answers ?? {}}
-                  onAnswerChange={updateAnswer}
-                />
-
-                <div className="shrink-0 border-t border-slate-100 bg-white p-3">
-                  <motion.button
-                    whileTap={{ scale: 0.98 }}
-                    onClick={handleSaveLKPD}
-                    disabled={isSaving}
-                    className={cx(
-                      "mx-auto flex w-full max-w-3xl items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition-all duration-300",
-                      saveSuccess ? "bg-green-500 text-white" : "bg-pastel-green text-slate-800 hover:bg-[#a1ceb4]",
-                    )}
-                  >
-                    {isSaving ? <Loader2 className="animate-spin" size={18} /> : saveSuccess ? <Check size={18} /> : <Save size={18} />}
-                    {saveSuccess ? "LKPD Bakteri tersimpan" : "Simpan LKPD Bakteri"}
-                  </motion.button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                {isSaving ? <Loader2 className="animate-spin" size={18} /> : saveSuccess ? <Check size={18} /> : <Save size={18} />}
+                {saveSuccess ? "LKPD Bakteri tersimpan" : "Simpan LKPD Bakteri"}
+              </motion.button>
+            </div>
+          </div>
         </div>
       </motion.div>
     );
