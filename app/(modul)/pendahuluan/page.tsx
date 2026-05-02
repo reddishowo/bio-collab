@@ -162,6 +162,61 @@ export default function PendahuluanPage() {
         </dl>
       </motion.div>
 
+      {/* Indikator Abad 21 */}
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeInUp}
+        className="rounded-2xl border border-pastel-blue/30 bg-white p-5 shadow-sm sm:p-6"
+      >
+        <div className="mb-4 flex items-center gap-3 text-slate-700">
+          <ClipboardList className="h-6 w-6 shrink-0 text-pastel-dark sm:h-7 sm:w-7" />
+          <h2 className="text-lg font-bold sm:text-xl">Indikator Abad 21</h2>
+        </div>
+        <div className="overflow-x-auto rounded-2xl border border-slate-200">
+          <table className="min-w-[720px] border-collapse text-left text-sm leading-7 sm:text-base">
+            <thead className="bg-pastel-dark text-white">
+              <tr>
+                <th className="w-1/3 px-4 py-3 font-extrabold">Indikator Abad 21</th>
+                <th className="px-4 py-3 font-extrabold">Deskriptor</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-200">
+              <tr className="bg-white align-top">
+                <td className="px-4 py-4 font-bold text-slate-800">Menjelaskan Fenomena Secara Ilmiah</td>
+                <td className="px-4 py-4 text-slate-600">
+                  Siswa dapat menjelaskan fenomena terkait peran bakteri dalam kehidupan sehari-hari, baik yang
+                  menguntungkan maupun merugikan, menggunakan konsep biologi yang sesuai dan disertai alasan yang
+                  masuk akal.
+                </td>
+              </tr>
+              <tr className="bg-slate-50/70 align-top">
+                <td className="px-4 py-4 font-bold text-slate-800">
+                  Merancang dan Mengevaluasi Desain untuk Penyelidikan Ilmiah serta Menafsirkan Data dan Bukti
+                  Ilmiah secara Kritis
+                </td>
+                <td className="px-4 py-4 text-slate-600">
+                  Siswa dapat menyusun rancangan percobaan sederhana (uji pembusukan makanan atau fermentasi nata de
+                  nanas), melaksanakannya, mencatat hasilnya, lalu mengolah dan menyimpulkan data yang diperoleh
+                  berdasarkan bukti yang ada.
+                </td>
+              </tr>
+              <tr className="bg-white align-top">
+                <td className="px-4 py-4 font-bold text-slate-800">
+                  Meneliti, mengevaluasi, dan menggunakan informasi ilmiah untuk pengambilan keputusan dan tindakan
+                </td>
+                <td className="px-4 py-4 text-slate-600">
+                  Siswa dapat mencari informasi ilmiah tentang bioteknologi dan manfaat bakteri, menilai
+                  kebenarannya, lalu menggunakannya sebagai dasar dalam mengambil keputusan atau merancang solusi yang
+                  realistis dan bertanggung jawab.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </motion.div>
+
       </div>
     </div>
   );
