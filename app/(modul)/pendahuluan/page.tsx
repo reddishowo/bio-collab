@@ -11,38 +11,38 @@ export default function PendahuluanPage() {
   };
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6 sm:space-y-8 md:space-y-10">
       
       {/* Header */}
       <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
-        <h1 className="text-4xl font-extrabold text-slate-800 mb-2">Pendahuluan</h1>
-        <p className="text-slate-500 text-lg">Mari kenali arah dan tujuan pembelajaran kita sebelum menyelam lebih dalam.</p>
+        <h1 className="mb-2 text-3xl font-extrabold text-slate-800 sm:text-4xl">Pendahuluan</h1>
+        <p className="text-sm leading-7 text-slate-500 sm:text-lg">Mari kenali arah dan tujuan pembelajaran kita sebelum menyelam lebih dalam.</p>
       </motion.div>
 
       {/* Grid Capaian & Tujuan */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid gap-4 md:grid-cols-2 md:gap-6">
         <motion.div 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeInUp}
-          className="bg-white p-6 rounded-2xl shadow-sm border border-pastel-blue/20 hover:shadow-md transition-shadow"
+          className="rounded-2xl border border-pastel-blue/20 bg-white p-5 shadow-sm transition-shadow hover:shadow-md sm:p-6"
         >
-          <div className="flex items-center gap-3 mb-4 text-pastel-dark">
-            <Target size={28} />
-            <h2 className="text-xl font-bold">Capaian Pembelajaran</h2>
+          <div className="mb-4 flex items-center gap-3 text-pastel-dark">
+            <Target className="h-6 w-6 shrink-0 sm:h-7 sm:w-7" />
+            <h2 className="text-lg font-bold sm:text-xl">Capaian Pembelajaran</h2>
           </div>
-          <p className="text-slate-600 leading-relaxed">
+          <p className="text-sm leading-7 text-slate-600 sm:text-base">
             Siswa mampu menganalisis permasalahan biologi secara kritis dan kreatif, serta mampu berkolaborasi untuk menemukan solusi inovatif melalui pendekatan pemecahan masalah (Problem Solving) di lingkungan sekitarnya.
           </p>
         </motion.div>
 
         <motion.div 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeInUp}
-          className="bg-white p-6 rounded-2xl shadow-sm border border-pastel-green/30 hover:shadow-md transition-shadow"
+          className="rounded-2xl border border-pastel-green/30 bg-white p-5 shadow-sm transition-shadow hover:shadow-md sm:p-6"
         >
-          <div className="flex items-center gap-3 mb-4 text-pastel-green">
-            <Flag size={28} />
-            <h2 className="text-xl font-bold">Tujuan Pembelajaran</h2>
+          <div className="mb-4 flex items-center gap-3 text-pastel-green">
+            <Flag className="h-6 w-6 shrink-0 sm:h-7 sm:w-7" />
+            <h2 className="text-lg font-bold sm:text-xl">Tujuan Pembelajaran</h2>
           </div>
-          <ul className="text-slate-600 leading-relaxed list-disc list-inside space-y-2">
+          <ul className="list-inside list-disc space-y-2 text-sm leading-7 text-slate-600 sm:text-base">
             <li>Peserta didik mampu memahami peranan bakteri dalam kehidupan.</li>
             <li>Peserta didik mampu memahami pemanfaatan bioteknologi dalam berbagai bidang kehidupan</li>
           </ul>
@@ -52,13 +52,13 @@ export default function PendahuluanPage() {
       {/* Peta Konsep */}
       <motion.div 
         initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-        className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100"
+        className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm sm:p-6"
       >
-        <div className="flex items-center gap-3 mb-4 text-slate-700">
-          <MapIcon size={28} />
-          <h2 className="text-xl font-bold">Peta Konsep</h2>
+        <div className="mb-4 flex items-center gap-3 text-slate-700">
+          <MapIcon className="h-6 w-6 shrink-0 sm:h-7 sm:w-7" />
+          <h2 className="text-lg font-bold sm:text-xl">Peta Konsep</h2>
         </div>
-        <div className="bg-pastel-light/50 w-full h-48 rounded-xl border border-dashed border-pastel-blue flex items-center justify-center text-pastel-dark font-medium">
+        <div className="flex h-40 w-full items-center justify-center rounded-xl border border-dashed border-pastel-blue bg-pastel-light/50 px-4 text-center text-sm font-medium text-pastel-dark sm:h-48 sm:text-base">
           [ Area Gambar Peta Konsep Biologi ]
         </div>
       </motion.div>
@@ -68,34 +68,34 @@ export default function PendahuluanPage() {
       {/* TAHAP 1 OE-C: MENGORIENTASI SISWA */}
       <motion.div 
         initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
-        className="bg-linear-to-br from-pastel-dark to-pastel-blue p-8 rounded-3xl shadow-lg text-white"
+        className="rounded-3xl bg-linear-to-br from-pastel-dark to-pastel-blue p-5 text-white shadow-lg sm:p-8"
       >
-        <div className="inline-block bg-white/20 px-4 py-1 rounded-full text-sm font-semibold tracking-wide mb-4">
+        <div className="mb-4 inline-block rounded-full bg-white/20 px-4 py-1 text-xs font-semibold tracking-wide sm:text-sm">
           Tahap 1: Mengorientasi Siswa
         </div>
-        <h2 className="text-3xl font-bold mb-4">Apersepsi & Fenomena</h2>
-        <p className="text-white/90 text-lg mb-6 leading-relaxed">
+        <h2 className="mb-4 text-2xl font-bold sm:text-3xl">Apersepsi & Fenomena</h2>
+        <p className="mb-6 text-sm leading-7 text-white/90 sm:text-lg sm:leading-relaxed">
           Pernahkah Anda memperhatikan bagaimana lingkungan di sekitar kita berubah seiring waktu? 
           Mari kita lihat fenomena berikut yang memicu pertanyaan besar tentang kelangsungan ekosistem kita.
         </p>
 
         {/* Video / Gambar Pemantik */}
-        <div className="relative w-full aspect-video bg-slate-800 rounded-xl overflow-hidden flex items-center justify-center group cursor-pointer border-4 border-white/10">
-          <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all flex items-center justify-center">
+        <div className="group relative flex aspect-video w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border-4 border-white/10 bg-slate-800">
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 transition-all group-hover:bg-black/20">
             <motion.div whileHover={{ scale: 1.2 }} whileTap={{ scale: 0.9 }}>
-              <PlayCircle size={64} className="text-white opacity-80 transition-transform" />
+              <PlayCircle className="h-12 w-12 text-white opacity-80 transition-transform sm:h-16 sm:w-16" />
             </motion.div>
           </div>
-          <p className="text-slate-400 absolute bottom-4 text-sm font-medium">Klik untuk memutar video fenomena</p>
+          <p className="absolute bottom-3 px-4 text-center text-xs font-medium text-slate-400 sm:bottom-4 sm:text-sm">Klik untuk memutar video fenomena</p>
         </div>
 
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }}
-          className="mt-6 flex gap-4 items-start bg-white/10 p-5 rounded-xl"
+          className="mt-6 flex flex-col gap-3 rounded-xl bg-white/10 p-4 sm:flex-row sm:items-start sm:gap-4 sm:p-5"
         >
-          <AlertCircle size={32} className="shrink-0 text-pastel-light" />
-          <p className="text-sm font-medium italic leading-relaxed text-white/95">
-            "Setelah mengamati fenomena di atas, konflik kognitif apa yang terlintas di pikiran Anda? Apakah menurut Anda alam dapat memulihkan dirinya sendiri, atau campur tangan manusia yang menjadi penyebab utamanya?"
+          <AlertCircle className="h-7 w-7 shrink-0 text-pastel-light sm:h-8 sm:w-8" />
+          <p className="text-sm font-medium italic leading-7 text-white/95">
+            &quot;Setelah mengamati fenomena di atas, konflik kognitif apa yang terlintas di pikiran Anda? Apakah menurut Anda alam dapat memulihkan dirinya sendiri, atau campur tangan manusia yang menjadi penyebab utamanya?&quot;
           </p>
         </motion.div>
       </motion.div>

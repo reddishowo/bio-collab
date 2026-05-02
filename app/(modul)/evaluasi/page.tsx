@@ -117,7 +117,7 @@ export default function EvaluasiPage() {
   // --- UI LOADING SAAT CEK STATUS KETUA ---
   if (loading) {
     return (
-       <div className="flex flex-col items-center justify-center h-[50vh] text-pastel-dark">
+       <div className="flex h-[50vh] flex-col items-center justify-center text-center text-pastel-dark">
         <Loader2 className="animate-spin mb-4" size={40} />
         <p className="font-bold">Memeriksa status Anda...</p>
       </div>
@@ -127,14 +127,14 @@ export default function EvaluasiPage() {
   // --- UI JIKA BELUM LOGIN ---
   if (!userState) {
     return (
-      <div className="flex flex-col items-center justify-center text-center bg-yellow-50 border-2 border-dashed border-yellow-200 p-10 rounded-3xl min-h-[50vh]">
-        <ShieldAlert className="w-16 h-16 text-yellow-400 mb-4" />
-        <h2 className="text-2xl font-bold text-yellow-800">Akses Ditolak</h2>
-        <p className="text-yellow-700 mt-2 max-w-md">
+      <div className="flex min-h-[50vh] flex-col items-center justify-center rounded-3xl border-2 border-dashed border-yellow-200 bg-yellow-50 p-6 text-center sm:p-10">
+        <ShieldAlert className="mb-4 h-14 w-14 text-yellow-400 sm:h-16 sm:w-16" />
+        <h2 className="text-xl font-bold text-yellow-800 sm:text-2xl">Akses Ditolak</h2>
+        <p className="mt-2 max-w-md text-sm leading-7 text-yellow-700 sm:text-base">
           Anda harus bergabung dengan kelompok di Ruang Kolaborasi (LKPD) terlebih dahulu untuk mengerjakan evaluasi.
         </p>
-        <Link href="/lkpd">
-          <button className="mt-6 flex items-center gap-2 px-6 py-3 bg-yellow-400 text-yellow-900 font-bold rounded-full hover:bg-yellow-500 transition-all shadow-md">
+        <Link href="/lkpd" className="w-full sm:w-auto">
+          <button className="mt-6 flex w-full items-center justify-center gap-2 rounded-full bg-yellow-400 px-5 py-3 text-sm font-bold text-yellow-900 shadow-md transition-all hover:bg-yellow-500 sm:w-auto sm:px-6 sm:text-base">
             Masuk ke Ruang Kolaborasi <ArrowRight size={18} />
           </button>
         </Link>
@@ -145,13 +145,13 @@ export default function EvaluasiPage() {
   // --- UI JIKA SUDAH SUBMIT ---
   if (isSubmitted) {
     return (
-      <div className="flex flex-col items-center justify-center text-center bg-green-50 p-10 rounded-3xl min-h-[50vh] animate-in fade-in zoom-in-95">
-        <CheckCircle className="w-20 h-20 text-green-500 mb-6" />
-        <h2 className="text-3xl font-extrabold text-green-800">Evaluasi Telah Dikirim!</h2>
-        <p className="text-green-700 mt-2 text-lg">
+      <div className="flex min-h-[50vh] flex-col items-center justify-center rounded-3xl bg-green-50 p-6 text-center animate-in fade-in zoom-in-95 sm:p-10">
+        <CheckCircle className="mb-6 h-16 w-16 text-green-500 sm:h-20 sm:w-20" />
+        <h2 className="text-2xl font-extrabold text-green-800 sm:text-3xl">Evaluasi Telah Dikirim!</h2>
+        <p className="mt-2 text-sm leading-7 text-green-700 sm:text-lg">
           Terima kasih, <span className="font-bold">{userState.userName}</span>! Jawaban Anda telah berhasil kami rekam.
         </p>
-        <p className="text-slate-500 mt-8 text-sm">
+        <p className="mt-8 text-sm text-slate-500">
           Anda telah menyelesaikan seluruh rangkaian pembelajaran.
         </p>
       </div>
@@ -160,38 +160,38 @@ export default function EvaluasiPage() {
 
   // --- UI FORM EVALUASI UTAMA ---
   return (
-    <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 sm:space-y-12">
       <div className="text-center">
-        <h1 className="text-4xl font-extrabold text-slate-800">Evaluasi Pembelajaran</h1>
-        <p className="text-slate-500 mt-2 text-lg">Ukur pemahaman dan pengalaman belajarmu di modul ini.</p>
+        <h1 className="text-3xl font-extrabold text-slate-800 sm:text-4xl">Evaluasi Pembelajaran</h1>
+        <p className="mt-2 text-sm leading-7 text-slate-500 sm:text-lg">Ukur pemahaman dan pengalaman belajarmu di modul ini.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-12">
-        <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-pastel-blue/20">
-          <h2 className="text-2xl font-bold text-slate-800 border-b border-slate-200 pb-4 mb-6">
+      <form onSubmit={handleSubmit} className="space-y-8 sm:space-y-12">
+        <div className="rounded-3xl border border-pastel-blue/20 bg-white p-5 shadow-sm sm:p-6 md:p-8">
+          <h2 className="mb-6 border-b border-slate-200 pb-4 text-xl font-bold text-slate-800 sm:text-2xl">
             1. Evaluasi Pengetahuan (Individu)
           </h2>
-          <div className="space-y-8">
+          <div className="space-y-7 sm:space-y-8">
             {quizQuestions.map((q, index) => (
               <motion.div 
                 key={q.id}
                 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}
               >
-                <p className="font-bold text-slate-700 mb-4">{index + 1}. {q.question}</p>
+                <p className="mb-4 text-sm font-bold leading-7 text-slate-700 sm:text-base">{index + 1}. {q.question}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {q.options.map(option => (
                     <motion.label 
                       key={option} 
                       whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                      className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all cursor-pointer ${quizAnswers[q.id] === option ? 'border-pastel-dark bg-pastel-light/50 shadow-sm' : 'border-slate-200 bg-slate-50 hover:border-pastel-blue'}`}
+                      className={`flex cursor-pointer items-center gap-3 rounded-xl border-2 p-3 transition-all sm:p-4 ${quizAnswers[q.id] === option ? 'border-pastel-dark bg-pastel-light/50 shadow-sm' : 'border-slate-200 bg-slate-50 hover:border-pastel-blue'}`}
                     >
                       <input 
                         type="radio" name={q.id} value={option}
                         checked={quizAnswers[q.id] === option}
                         onChange={() => handleQuizChange(q.id, option)}
-                        className="w-5 h-5 accent-pastel-dark"
+                        className="h-5 w-5 shrink-0 accent-pastel-dark"
                       />
-                      <span className="font-medium text-slate-600">{option}</span>
+                      <span className="text-sm font-medium leading-6 text-slate-600 sm:text-base">{option}</span>
                     </motion.label>
                   ))}
                 </div>
@@ -202,20 +202,20 @@ export default function EvaluasiPage() {
 
         {/* Bagian 2: Evaluasi Kelompok (Hanya Ketua) */}
         {isLeader && (
-          <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-pastel-green/30 animate-in fade-in">
-            <h2 className="text-2xl font-bold text-slate-800 border-b border-slate-200 pb-4 mb-6 flex items-center gap-3">
-              <Crown className="text-yellow-500" /> 2. Evaluasi Kelompok (Khusus Ketua)
+          <div className="rounded-3xl border border-pastel-green/30 bg-white p-5 shadow-sm animate-in fade-in sm:p-6 md:p-8">
+            <h2 className="mb-6 flex items-center gap-3 border-b border-slate-200 pb-4 text-xl font-bold text-slate-800 sm:text-2xl">
+              <Crown className="shrink-0 text-yellow-500" /> 2. Evaluasi Kelompok (Khusus Ketua)
             </h2>
             <div className="space-y-6">
                <div>
-                  <label htmlFor="eval-kelompok" className="font-bold text-slate-700 mb-3 block">
+                  <label htmlFor="eval-kelompok" className="mb-3 block text-sm font-bold leading-7 text-slate-700 sm:text-base">
                     Sebagai perwakilan tim, jelaskan bagaimana proses kolaborasi kelompok Anda dalam memecahkan masalah open-ended yang diberikan? (Sebutkan tantangan dan keberhasilan tim Anda).
                   </label>
                   <textarea 
                     id="eval-kelompok"
                     value={kelompokAnswer}
                     onChange={(e) => setKelompokAnswer(e.target.value)}
-                    className="w-full h-40 p-4 border border-slate-200 rounded-xl focus:ring-2 focus:ring-pastel-dark focus:outline-none text-slate-700 bg-slate-50"
+                    className="h-40 w-full rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700 focus:outline-none focus:ring-2 focus:ring-pastel-dark sm:text-base"
                     placeholder="Contoh: Kelompok kami awalnya kesulitan dalam..., namun kami berhasil... dengan cara..."
                   />
                 </div>
@@ -226,7 +226,7 @@ export default function EvaluasiPage() {
         {/* Tombol Submit */}
         <div className="pt-4 text-center">
           {errorMsg && <p className="text-red-500 text-sm font-medium mb-4">{errorMsg}</p>}
-          <button type="submit" disabled={isSubmitting} className="w-full max-w-md mx-auto bg-pastel-dark text-white font-bold text-lg py-4 rounded-full hover:bg-blue-600 transition-colors shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+          <button type="submit" disabled={isSubmitting} className="mx-auto flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-pastel-dark py-3.5 text-base font-bold text-white shadow-lg transition-colors hover:bg-blue-600 hover:shadow-xl disabled:opacity-70 sm:py-4 sm:text-lg">
             {isSubmitting ? <Loader2 className="animate-spin" /> : 'Kirim Jawaban Evaluasi'}
           </button>
         </div>

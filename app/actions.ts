@@ -15,6 +15,7 @@ export interface LKPDItem {
   inkubasi: string;
   iluminasi: string;
   verifikasi: string;
+  answers?: Record<string, string>;
 }
 
 // Pilihan Topik yang valid
@@ -68,6 +69,20 @@ export type GroupActionResult =
   | { success: true; group: GroupData }
   | { success: false; message: string };
 
+function getDatabaseActionMessage(error: unknown, fallback: string) {
+  const errorCode = typeof error === "object" && error && "code" in error ? String(error.code) : "";
+  const errorMessage = error instanceof Error ? error.message : "";
+  const isConnectionError =
+    errorMessage.includes("querySrv") ||
+    ["ECONNREFUSED", "ENOTFOUND", "ETIMEDOUT", "ETIMEOUT"].includes(errorCode);
+
+  if (isConnectionError) {
+    return "Tidak bisa terhubung ke database. Periksa koneksi internet, DNS, atau akses MongoDB Atlas.";
+  }
+
+  return fallback;
+}
+
 // Helper: Konversi dari dokumen Mongo ke format Frontend
 function toGroupData(group: GroupDocument): GroupData {
   return {
@@ -112,7 +127,7 @@ export async function createGroup(groupName: string, leaderName: string): Promis
     };
   } catch (error) {
     console.error("Error createGroup:", error);
-    return { success: false, message: 'Gagal membuat kelompok' };
+    return { success: false, message: getDatabaseActionMessage(error, 'Gagal membuat kelompok') };
   }
 }
 
@@ -157,7 +172,7 @@ export async function joinGroup(code: string, memberName: string): Promise<Group
     };
   } catch (error) {
     console.error("Error joinGroup:", error);
-    return { success: false, message: 'Gagal bergabung' };
+    return { success: false, message: getDatabaseActionMessage(error, 'Gagal bergabung') };
   }
 }
 
@@ -240,7 +255,7 @@ export async function getGroupData(groupCode: string): Promise<GroupData | null>
     if (!group) return null;
 
     return toGroupData(group);
-  } catch (error) {
+  } catch {
     return null;
   }
 }

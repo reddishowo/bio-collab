@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 
 interface UserState {
   userName: string;
@@ -17,15 +17,19 @@ interface GroupContextType {
 const GroupContext = createContext<GroupContextType | undefined>(undefined);
 
 export function GroupProvider({ children }: { children: ReactNode }) {
-  const [userState, setUserState] = useState<UserState | null>(null);
+  const [userState, setUserState] = useState<UserState | null>(() => {
+    if (typeof window === "undefined") return null;
 
-  // Saat pertama kali web dibuka, cek apakah ada sesi yang tersimpan di browser
-  useEffect(() => {
     const savedSession = localStorage.getItem("biocollab_session");
-    if (savedSession) {
-      setUserState(JSON.parse(savedSession));
+    if (!savedSession) return null;
+
+    try {
+      return JSON.parse(savedSession);
+    } catch {
+      localStorage.removeItem("biocollab_session");
+      return null;
     }
-  }, []);
+  });
 
   const loginSession = (userName: string, groupCode: string, groupName: string) => {
     const newState = { userName, groupCode, groupName };
