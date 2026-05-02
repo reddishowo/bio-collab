@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState, type ReactNode } from "react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import {
   BookOpen,
@@ -132,10 +133,12 @@ function PhaseSection({
 function PromptBox({
   title,
   children,
+  media,
   tone = "blue",
 }: {
   title: string;
   children: ReactNode;
+  media?: ReactNode;
   tone?: "blue" | "green" | "yellow";
 }) {
   return (
@@ -147,6 +150,7 @@ function PromptBox({
         tone === "blue" && "bg-pastel-light border-pastel-blue/40 text-slate-700",
       )}
     >
+      {media}
       <p className="mb-2 font-extrabold text-pastel-dark">{title}</p>
       {children}
     </div>
@@ -484,7 +488,28 @@ function LkpdContent({
           {meeting.id === "p2" && (
             <>
               <PhaseSection number="01" title="Mengorientasi Siswa">
-                <PromptBox title="Stimulus" tone="yellow">
+                <PromptBox
+                  title="Stimulus"
+                  tone="yellow"
+                  media={
+                    <div className="mb-4 grid gap-3 sm:grid-cols-2">
+                      <Image
+                        src="/apel.jpeg"
+                        alt="Apel sebagai contoh makanan segar"
+                        width={600}
+                        height={401}
+                        className="h-44 w-full rounded-xl object-cover shadow-sm"
+                      />
+                      <Image
+                        src="/roti_jamur.jpeg"
+                        alt="Roti berjamur sebagai contoh makanan yang membusuk"
+                        width={571}
+                        height={366}
+                        className="h-44 w-full rounded-xl object-cover shadow-sm"
+                      />
+                    </div>
+                  }
+                >
                   Guru menampilkan makanan segar dan makanan yang telah membusuk seperti roti, buah, dan daging.
                 </PromptBox>
                 <PromptBox title="Pertanyaan Pemantik">
@@ -497,7 +522,19 @@ function LkpdContent({
               </PhaseSection>
 
               <PhaseSection number="02" title="Pemberian Masalah Open-Ended">
-                <PromptBox title="Masalah Open-Ended" tone="yellow">
+                <PromptBox
+                  title="Masalah Open-Ended"
+                  tone="yellow"
+                  media={
+                    <Image
+                      src="/orang_roti_jamur.jpeg"
+                      alt="Pedagang memegang roti berjamur"
+                      width={974}
+                      height={1024}
+                      className="mb-4 max-h-80 w-full rounded-xl object-cover object-center shadow-sm"
+                    />
+                  }
+                >
                   Seorang pedagang makanan mengeluhkan rotinya selalu berjamur dan berbau dalam dua hari
                   walaupun disimpan tertutup. Ia ingin mengetahui apakah suhu, kelembapan, atau jenis kemasan
                   memengaruhi kecepatan pembusukan.
