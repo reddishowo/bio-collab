@@ -214,7 +214,9 @@ Buat file `.env.local` di root project:
 MONGODB_URI=mongodb+srv://username:password@cluster-url/biocollab_db?retryWrites=true&w=majority
 ```
 
-> `lib/mongodb.ts` akan melempar error jika `MONGODB_URI` belum diisi.
+Kamu juga bisa menyalin format dari `.env.example`.
+
+> Jika `MONGODB_URI` belum diisi, fitur yang menyimpan atau membaca data kelompok akan menampilkan pesan konfigurasi database.
 
 ### Jalankan Development Server
 ```bash

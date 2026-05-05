@@ -1,25 +1,16 @@
 import dns from 'node:dns';
 import { MongoClient, type MongoClientOptions } from 'mongodb';
 
-if (!process.env.MONGODB_URI) {
-  throw new Error('Please add your Mongo URI to .env.local');
-}
-
-const uri = process.env.MONGODB_URI;
 const options: MongoClientOptions = {};
 const dnsServer = process.env.MONGODB_DNS_SERVER?.trim();
-
-if (uri.startsWith('mongodb+srv://') && dnsServer) {
-  dns.setServers([dnsServer]);
-}
 
 declare global {
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
-let clientPromise: Promise<MongoClient>;
+let clientPromise: Promise<MongoClient> | undefined;
 
-function createClientPromise() {
+function createClientPromise(uri: string) {
   const client = new MongoClient(uri, options);
 
   return client.connect().catch((error) => {
@@ -31,13 +22,27 @@ function createClientPromise() {
   });
 }
 
-if (process.env.NODE_ENV === 'development') {
-  if (!global._mongoClientPromise) {
-    global._mongoClientPromise = createClientPromise();
+export function getMongoClient() {
+  const uri = process.env.MONGODB_URI?.trim();
+
+  if (!uri) {
+    throw new Error('MONGODB_URI is not configured. Add it to .env.local.');
   }
-  clientPromise = global._mongoClientPromise;
-} else {
-  clientPromise = createClientPromise();
+
+  if (uri.startsWith('mongodb+srv://') && dnsServer) {
+    dns.setServers([dnsServer]);
+  }
+
+  if (process.env.NODE_ENV !== 'development') {
+    clientPromise ??= createClientPromise(uri);
+    return clientPromise;
+  }
+
+  if (!global._mongoClientPromise) {
+    global._mongoClientPromise = createClientPromise(uri);
+  }
+
+  return global._mongoClientPromise;
 }
 
-export default clientPromise;
+export default getMongoClient;

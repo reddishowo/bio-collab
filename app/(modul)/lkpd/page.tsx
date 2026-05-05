@@ -12,6 +12,7 @@ import {
   Loader2,
   LogOut,
   Save,
+  Users,
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -783,6 +784,8 @@ export default function LkpdWorkspacePage() {
 
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveError, setSaveError] = useState("");
+  const [membersOpen, setMembersOpen] = useState(false);
   const currentGroupCode = joinedGroup?.groupCode ?? "";
 
   useEffect(() => {
@@ -865,6 +868,8 @@ export default function LkpdWorkspacePage() {
   const handleSaveLKPD = async () => {
     if (!currentGroupCode) return;
     setIsSaving(true);
+    setSaveError("");
+    setSaveSuccess(false);
 
     const nextData: ExtendedLKPDItem = {
       ...lkpdData,
@@ -874,9 +879,15 @@ export default function LkpdWorkspacePage() {
       verifikasi: lkpdData.answers?.["p4-conclusion"] ?? lkpdData.verifikasi,
     };
 
-    await saveLKPD(currentGroupCode, currentTopic, nextData);
-    setLkpdData(nextData);
+    const result = await saveLKPD(currentGroupCode, currentTopic, nextData);
     setIsSaving(false);
+
+    if (!result.success) {
+      setSaveError(result.message || "Gagal menyimpan LKPD");
+      return;
+    }
+
+    setLkpdData(nextData);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
   };
@@ -886,6 +897,7 @@ export default function LkpdWorkspacePage() {
       logoutSession();
       setJoinedGroup(null);
       setName("");
+      setMembersOpen(false);
     }
   };
 
@@ -911,21 +923,67 @@ export default function LkpdWorkspacePage() {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="flex -space-x-2">
-              {members.slice(0, 3).map((member: string) => (
-                <div
-                  key={member}
-                  className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-pastel-blue text-[10px] font-bold text-white shadow-sm"
-                  title={member}
-                >
-                  {member.charAt(0).toUpperCase()}
-                </div>
-              ))}
-              {members.length > 3 && (
-                <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-slate-200 text-[10px] font-bold text-slate-600">
-                  +{members.length - 3}
-                </div>
-              )}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setMembersOpen((open) => !open)}
+                className="flex -space-x-2 rounded-full outline-none ring-pastel-blue/40 transition hover:brightness-95 focus-visible:ring-2"
+                title="Lihat anggota kelompok"
+                aria-label="Lihat anggota kelompok"
+                aria-expanded={membersOpen}
+              >
+                {members.slice(0, 3).map((member: string) => (
+                  <span
+                    key={member}
+                    className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-pastel-blue text-[10px] font-bold text-white shadow-sm"
+                    title={member}
+                  >
+                    {member.charAt(0).toUpperCase()}
+                  </span>
+                ))}
+                {members.length > 3 && (
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-slate-200 text-[10px] font-bold text-slate-600">
+                    +{members.length - 3}
+                  </span>
+                )}
+              </button>
+
+              <AnimatePresence>
+                {membersOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -6, scale: 0.98 }}
+                    transition={{ duration: 0.16 }}
+                    className="absolute right-0 top-10 z-30 w-64 overflow-hidden rounded-xl border border-slate-100 bg-white shadow-xl"
+                  >
+                    <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+                      <div className="flex items-center gap-2 text-xs font-bold text-slate-700">
+                        <Users size={15} className="text-pastel-dark" />
+                        Anggota Kelompok
+                      </div>
+                      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500">
+                        {members.length}
+                      </span>
+                    </div>
+                    <div className="max-h-72 overflow-y-auto p-2">
+                      {members.map((member: string) => (
+                        <div key={member} className="flex items-center gap-3 rounded-lg px-2 py-2">
+                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-pastel-blue text-xs font-bold text-white">
+                            {member.charAt(0).toUpperCase()}
+                          </span>
+                          <span className="min-w-0 flex-1 truncate text-sm font-semibold text-slate-700">{member}</span>
+                          {member === name && (
+                            <span className="rounded-full bg-pastel-light px-2 py-0.5 text-[10px] font-bold text-pastel-dark">
+                              Kamu
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <button
@@ -968,6 +1026,11 @@ export default function LkpdWorkspacePage() {
                 {isSaving ? <Loader2 className="animate-spin" size={18} /> : saveSuccess ? <Check size={18} /> : <Save size={18} />}
                 {saveSuccess ? "LKPD Bakteri tersimpan" : "Simpan LKPD Bakteri"}
               </motion.button>
+              {saveError && (
+                <p className="mx-auto mt-2 max-w-3xl rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs font-medium text-red-600">
+                  {saveError}
+                </p>
+              )}
             </div>
           </div>
         </div>

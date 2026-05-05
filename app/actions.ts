@@ -1,8 +1,8 @@
-// File: /app/actions.ts
-
 'use server';
 
-import clientPromise from '@/lib/mongodb';
+// File: /app/actions.ts
+
+import getMongoClient from '@/lib/mongodb';
 import { ObjectId } from 'mongodb';
 
 const DB_NAME = 'biocollab_db';
@@ -69,12 +69,21 @@ export type GroupActionResult =
   | { success: true; group: GroupData }
   | { success: false; message: string };
 
+export type BasicActionResult =
+  | { success: true }
+  | { success: false; message: string };
+
 function getDatabaseActionMessage(error: unknown, fallback: string) {
   const errorCode = typeof error === "object" && error && "code" in error ? String(error.code) : "";
   const errorMessage = error instanceof Error ? error.message : "";
+  const isMissingConfig = errorMessage.includes("MONGODB_URI is not configured");
   const isConnectionError =
     errorMessage.includes("querySrv") ||
     ["ECONNREFUSED", "ENOTFOUND", "ETIMEDOUT", "ETIMEOUT"].includes(errorCode);
+
+  if (isMissingConfig) {
+    return "Database belum dikonfigurasi. Tambahkan MONGODB_URI ke file .env.local lalu restart server.";
+  }
 
   if (isConnectionError) {
     return "Tidak bisa terhubung ke database. Periksa koneksi internet, DNS, atau akses MongoDB Atlas.";
@@ -97,7 +106,7 @@ function toGroupData(group: GroupDocument): GroupData {
 // --- 1. BUAT KELOMPOK BARU ---
 export async function createGroup(groupName: string, leaderName: string): Promise<GroupActionResult> {
   try {
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db(DB_NAME);
     const groupsCollection = db.collection<GroupDocument>('groups');
 
@@ -134,7 +143,7 @@ export async function createGroup(groupName: string, leaderName: string): Promis
 // --- 2. GABUNG KELOMPOK ---
 export async function joinGroup(code: string, memberName: string): Promise<GroupActionResult> {
   try {
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db(DB_NAME);
     const groupsCollection = db.collection<GroupDocument>('groups');
     const groupCode = code.toUpperCase();
@@ -179,7 +188,7 @@ export async function joinGroup(code: string, memberName: string): Promise<Group
 // --- 3. AMBIL DATA CHAT ---
 export async function getChatMessages(groupCode: string): Promise<ChatMessage[]> {
   try {
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db(DB_NAME);
     const chatsCollection = db.collection<ChatDocument>('chats');
     
@@ -202,9 +211,9 @@ export async function getChatMessages(groupCode: string): Promise<ChatMessage[]>
 }
 
 // --- 4. KIRIM PESAN ---
-export async function sendChatMessage(groupCode: string, userName: string, message: string) {
+export async function sendChatMessage(groupCode: string, userName: string, message: string): Promise<BasicActionResult> {
   try {
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db(DB_NAME);
     const chatsCollection = db.collection<ChatDocument>('chats');
     
@@ -217,14 +226,14 @@ export async function sendChatMessage(groupCode: string, userName: string, messa
     return { success: true };
   } catch (error) {
     console.error("Error sendChatMessage:", error);
-    return { success: false };
+    return { success: false, message: getDatabaseActionMessage(error, "Gagal mengirim pesan") };
   }
 }
 
 // --- 5. SIMPAN JAWABAN LKPD (DINAMIS PER TOPIK) ---
-export async function saveLKPD(groupCode: string, topic: Topic, lkpdData: LKPDItem) {
+export async function saveLKPD(groupCode: string, topic: Topic, lkpdData: LKPDItem): Promise<BasicActionResult> {
   try {
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db(DB_NAME);
     const groupsCollection = db.collection<GroupDocument>('groups');
     
@@ -239,14 +248,14 @@ export async function saveLKPD(groupCode: string, topic: Topic, lkpdData: LKPDIt
     return { success: true };
   } catch (error) {
     console.error("Error saveLKPD:", error);
-    return { success: false };
+    return { success: false, message: getDatabaseActionMessage(error, "Gagal menyimpan LKPD") };
   }
 }
 
 // --- 6. AMBIL DATA KELOMPOK TERBARU ---
 export async function getGroupData(groupCode: string): Promise<GroupData | null> {
   try {
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db(DB_NAME);
     const groupsCollection = db.collection<GroupDocument>('groups');
     
@@ -271,9 +280,9 @@ export async function saveEvaluation(
   groupCode: string, 
   userName: string, 
   evalData: EvaluationData
-) {
+): Promise<BasicActionResult> {
   try {
-    const client = await clientPromise;
+    const client = await getMongoClient();
     const db = client.db(DB_NAME);
     const evaluationsCollection = db.collection('evaluations');
     
@@ -299,6 +308,6 @@ export async function saveEvaluation(
     return { success: true };
   } catch (error) {
     console.error("Error saveEvaluation:", error);
-    return { success: false };
+    return { success: false, message: getDatabaseActionMessage(error, "Gagal menyimpan evaluasi") };
   }
 }
