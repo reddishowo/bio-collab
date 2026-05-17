@@ -217,7 +217,7 @@ function MobileBottomNav({ isDark, onToggleTheme }: { isDark: boolean; onToggleT
                 <span className="flex h-9 w-9 items-center justify-center rounded-full bg-pastel-dark text-white">
                   <GraduationCap size={18} />
                 </span>
-                <span className="text-sm font-bold">Daftar Pengembang</span>
+                <span className="text-sm font-bold">Profil Pengembang</span>
               </Link>
             </div>
           </motion.div>

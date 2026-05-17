@@ -668,8 +668,8 @@ function MeetingTwoPages({ answers, onAnswerChange }: { answers: AnswerMap; onAn
         <p>Amatilah kondisi apel dan roti yang mengalami pembusukan pada gambar yang disajikan.</p>
         <p>Identifikasilah kemungkinan keterlibatan bakteri berdasarkan konsep ilmiah yang telah dipelajari, kemudian jelaskan secara singkat apa yang sebenarnya terjadi pada makanan tersebut.</p>
         <div className="grid grid-cols-2 gap-4">
-          <Image src="/apel.jpeg" alt="Apel segar dan membusuk" width={600} height={401} className="h-32 w-full object-cover" />
-          <Image src="/roti_jamur.jpeg" alt="Roti berjamur" width={571} height={366} className="h-32 w-full object-cover" />
+          <Image src="/apel.jpeg" alt="Apel segar dan membusuk" width={600} height={401} className="h-32 w-full bg-white/40 object-contain" />
+          <Image src="/roti_jamur.jpeg" alt="Roti berjamur" width={571} height={366} className="h-32 w-full bg-white/40 object-contain" />
         </div>
         <p>
           <span className="font-black text-red-500">Berdasarkan pengamatanmu, kembangkan hipotesis:</span> siapa pelaku di balik pembusukan tersebut dan mengapa proses itu bisa terjadi?
@@ -677,7 +677,7 @@ function MeetingTwoPages({ answers, onAnswerChange }: { answers: AnswerMap; onAn
         <DottedTextarea id="p2-answer" label="Jawaban:" rows={6} answers={answers} onChange={onAnswerChange} />
       </WorksheetPage>
       <WorksheetPage meeting="p2" phase="2" phaseTitle="Pemberian Masalah Open-Ended">
-        <Image src="/orang_roti_jamur.jpeg" alt="Pedagang memegang roti berjamur" width={974} height={1024} className="mx-auto h-48 w-full max-w-xs object-cover" />
+        <Image src="/orang_roti_jamur.jpeg" alt="Pedagang memegang roti berjamur" width={974} height={1024} className="mx-auto h-48 w-full max-w-xs bg-white/40 object-contain" />
         <p className="font-black">Kasus:</p>
         <p>Seorang pedagang makanan mengeluhkan rotinya selalu berjamur dan berbau dalam 2 hari, padahal disimpan di tempat tertutup. Ia bertanya-tanya apakah suhu, kelembapan, atau jenis kemasan yang memengaruhi kecepatan pembusukan.</p>
         <p className="font-black text-red-500">Rumuskan dugaan awalmu:</p>
@@ -751,10 +751,10 @@ function MeetingThreePages({ answers, onAnswerChange }: { answers: AnswerMap; on
       <WorksheetPage meeting="p3" phase="1" phaseTitle="Mengorientasi Siswa">
         <p>Amatilah produk-produk bioteknologi yang disajikan (yogurt, tempe, pupuk hayati, biogas). Identifikasilah kesamaan prinsip ilmiah di balik semua produk tersebut berdasarkan pengetahuan biologimu tentang peran bakteri.</p>
         <div className="grid grid-cols-2 gap-4">
-          <Image src="/yogurt.jpeg" alt="Yogurt" width={600} height={400} className="h-28 w-full object-cover" />
-          <Image src="/tempe.jpeg" alt="Tempe" width={600} height={400} className="h-28 w-full object-cover" />
-          <Image src="/pupuk_hayati.jpeg" alt="Pupuk hayati" width={600} height={400} className="h-28 w-full object-cover" />
-          <Image src="/biogas.jpeg" alt="Biogas" width={600} height={400} className="h-28 w-full object-cover" />
+          <Image src="/yogurt.jpeg" alt="Yogurt" width={600} height={400} className="h-28 w-full bg-white/40 object-contain" />
+          <Image src="/tempe.jpeg" alt="Tempe" width={600} height={400} className="h-28 w-full bg-white/40 object-contain" />
+          <Image src="/pupuk_hayati.jpeg" alt="Pupuk hayati" width={600} height={400} className="h-28 w-full bg-white/40 object-contain" />
+          <Image src="/biogas.jpeg" alt="Biogas" width={600} height={400} className="h-28 w-full bg-white/40 object-contain" />
         </div>
         <ol className="list-decimal pl-5">
           <li>Apa kesamaan dari semua produk bioteknologi tersebut?</li>
@@ -827,7 +827,7 @@ function MeetingFourPages({ answers, onAnswerChange }: { answers: AnswerMap; onA
     <>
       <WorksheetPage meeting="p4" phase="1" phaseTitle="Mengorientasi Siswa">
         <p>Perhatikan gambar nata de nanas yang disajikan. Berdasarkan pengetahuan biologimu, identifikasilah peran Acetobacter xylinum dalam mengubah air nanas menjadi lapisan kenyal yang kita kenal sebagai nata.</p>
-        <Image src="/nata_de_pina.jpeg" alt="Nata de nanas" width={600} height={400} className="mx-auto h-48 w-full max-w-sm object-cover" />
+        <Image src="/nata_de_pina.jpeg" alt="Nata de nanas" width={600} height={400} className="mx-auto h-48 w-full max-w-sm bg-white/40 object-contain" />
         <p className="font-black text-red-500">Kembangkan hipotesismu: proses biokimia apa yang terjadi sehingga bakteri mampu membentuk lapisan selulosa padat dari cairan nanas?</p>
         <DottedTextarea id="p4-answer" label="Jawaban:" rows={6} answers={answers} onChange={onAnswerChange} />
       </WorksheetPage>
