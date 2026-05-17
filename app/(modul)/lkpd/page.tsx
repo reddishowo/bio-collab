@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import {
@@ -21,6 +21,7 @@ import {
   type LKPDItem,
 } from "@/app/actions";
 import { useGroupSession } from "@/components/GroupContext";
+import { isLkpdDemoModeEnabled } from "@/lib/lkpdDemo";
 
 type Topic = "bakteri";
 type MeetingId = "p1" | "p2" | "p3" | "p4";
@@ -200,6 +201,17 @@ const scienceIndicators = [
       "Siswa dapat mencari informasi ilmiah, menilai kebenarannya, lalu menggunakannya sebagai dasar pengambilan keputusan atau rancangan solusi.",
   },
 ];
+
+const demoGroup: GroupData = {
+  _id: "DEMO",
+  groupName: "Preview LKPD Dosen",
+  groupCode: "DEMO",
+  members: ["Dosen Penguji"],
+  lkpd: {},
+};
+
+const subscribeToDemoMode = () => () => {};
+const getDemoModeServerSnapshot = () => process.env.NEXT_PUBLIC_LKPD_DEMO_MODE === "true";
 
 function getTheme(meetingId: MeetingId) {
   return worksheetThemes[meetingId];
@@ -969,6 +981,11 @@ export default function LkpdWorkspacePage() {
 
   const [currentTopic] = useState<Topic>("bakteri");
   const activeMeeting = getMeetingId(searchParams.get("meeting"));
+  const isDemoMode = useSyncExternalStore(
+    subscribeToDemoMode,
+    isLkpdDemoModeEnabled,
+    getDemoModeServerSnapshot,
+  );
 
   const [lkpdData, setLkpdData] = useState<ExtendedLKPDItem>({
     tugas: "",
@@ -985,6 +1002,8 @@ export default function LkpdWorkspacePage() {
   const currentGroupCode = joinedGroup?.groupCode ?? "";
 
   useEffect(() => {
+    if (isDemoMode) return;
+
     if (userState && !joinedGroup) {
       const autoJoin = async () => {
         setLoading(true);
@@ -1000,7 +1019,7 @@ export default function LkpdWorkspacePage() {
       };
       autoJoin();
     }
-  }, [userState, joinedGroup, logoutSession]);
+  }, [userState, joinedGroup, logoutSession, isDemoMode]);
 
   const loadLKPDByTopic = useCallback(async (topic: Topic) => {
     if (!currentGroupCode) return;
@@ -1097,8 +1116,12 @@ export default function LkpdWorkspacePage() {
     }
   };
 
-  if (joinedGroup && currentGroupCode) {
-    const members = joinedGroup.members ?? [];
+  if (isDemoMode || (joinedGroup && currentGroupCode)) {
+    const activeGroup = isDemoMode ? demoGroup : joinedGroup;
+    if (!activeGroup) return null;
+
+    const members = activeGroup.members ?? [];
+    const activeGroupCode = isDemoMode ? demoGroup.groupCode : currentGroupCode;
 
     return (
       <motion.div
@@ -1109,12 +1132,14 @@ export default function LkpdWorkspacePage() {
       >
         <div className="z-10 flex shrink-0 items-center justify-between border-b border-slate-100 bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-950">
           <div>
-            <h2 className="line-clamp-1 text-sm font-bold text-slate-800 dark:text-slate-100 md:text-base">{joinedGroup.groupName}</h2>
+            <h2 className="line-clamp-1 text-sm font-bold text-slate-800 dark:text-slate-100 md:text-base">{activeGroup.groupName}</h2>
             <div className="mt-0.5 flex items-center gap-2">
               <span className="rounded border border-pastel-blue/30 bg-pastel-light px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-pastel-dark dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
-                {currentGroupCode}
+                {activeGroupCode}
               </span>
-              <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">{members.length} Anggota</span>
+              <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
+                {isDemoMode ? "Mode Pratinjau" : `${members.length} Anggota`}
+              </span>
             </div>
           </div>
 
@@ -1169,7 +1194,7 @@ export default function LkpdWorkspacePage() {
                             {member.charAt(0).toUpperCase()}
                           </span>
                           <span className="min-w-0 flex-1 truncate text-sm font-semibold text-slate-700 dark:text-slate-200">{member}</span>
-                          {member === name && (
+                          {!isDemoMode && member === name && (
                             <span className="rounded-full bg-pastel-light px-2 py-0.5 text-[10px] font-bold text-pastel-dark dark:bg-slate-800 dark:text-slate-200">
                               Kamu
                             </span>
@@ -1182,13 +1207,15 @@ export default function LkpdWorkspacePage() {
               </AnimatePresence>
             </div>
 
-            <button
-              onClick={handleLogout}
-              className="rounded-lg bg-red-50 p-2 text-red-400 transition-colors hover:text-red-600"
-              title="Keluar Kelompok"
-            >
-              <LogOut size={16} />
-            </button>
+            {!isDemoMode && (
+              <button
+                onClick={handleLogout}
+                className="rounded-lg bg-red-50 p-2 text-red-400 transition-colors hover:text-red-600"
+                title="Keluar Kelompok"
+              >
+                <LogOut size={16} />
+              </button>
+            )}
           </div>
         </div>
 
@@ -1203,31 +1230,39 @@ export default function LkpdWorkspacePage() {
           <div className="absolute inset-0 flex flex-col bg-white dark:bg-slate-950">
             <LkpdContent
               activeMeeting={activeMeeting}
-              joinedGroup={joinedGroup}
-              currentGroupCode={currentGroupCode}
+              joinedGroup={activeGroup}
+              currentGroupCode={activeGroupCode}
               answers={lkpdData.answers ?? {}}
               onAnswerChange={updateAnswer}
             />
 
-            <div className="shrink-0 border-t border-slate-100 bg-white p-3 dark:border-slate-800 dark:bg-slate-950">
-              <motion.button
-                whileTap={{ scale: 0.98 }}
-                onClick={handleSaveLKPD}
-                disabled={isSaving}
-                className={cx(
-                  "mx-auto flex w-full max-w-3xl items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition-all duration-300",
-                  saveSuccess ? "bg-green-500 text-white" : "bg-pastel-green text-slate-800 hover:bg-[#a1ceb4] dark:bg-emerald-700 dark:text-white dark:hover:bg-emerald-600",
-                )}
-              >
-                {isSaving ? <Loader2 className="animate-spin" size={18} /> : saveSuccess ? <Check size={18} /> : <Save size={18} />}
-                {saveSuccess ? "LKPD Bakteri tersimpan" : "Simpan LKPD Bakteri"}
-              </motion.button>
-              {saveError && (
-                <p className="mx-auto mt-2 max-w-3xl rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs font-medium text-red-600 dark:border-red-900 dark:bg-red-950/50 dark:text-red-200">
-                  {saveError}
+            {isDemoMode ? (
+              <div className="shrink-0 border-t border-slate-100 bg-white p-3 dark:border-slate-800 dark:bg-slate-950">
+                <p className="mx-auto max-w-3xl rounded-lg border border-pastel-blue/30 bg-pastel-light px-3 py-2 text-center text-xs font-bold text-pastel-dark dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
+                  Mode pratinjau dosen: LKPD dapat dibuka tanpa membuat kelompok. Jawaban yang diketik tidak disimpan.
                 </p>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="shrink-0 border-t border-slate-100 bg-white p-3 dark:border-slate-800 dark:bg-slate-950">
+                <motion.button
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleSaveLKPD}
+                  disabled={isSaving}
+                  className={cx(
+                    "mx-auto flex w-full max-w-3xl items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition-all duration-300",
+                    saveSuccess ? "bg-green-500 text-white" : "bg-pastel-green text-slate-800 hover:bg-[#a1ceb4] dark:bg-emerald-700 dark:text-white dark:hover:bg-emerald-600",
+                  )}
+                >
+                  {isSaving ? <Loader2 className="animate-spin" size={18} /> : saveSuccess ? <Check size={18} /> : <Save size={18} />}
+                  {saveSuccess ? "LKPD Bakteri tersimpan" : "Simpan LKPD Bakteri"}
+                </motion.button>
+                {saveError && (
+                  <p className="mx-auto mt-2 max-w-3xl rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs font-medium text-red-600 dark:border-red-900 dark:bg-red-950/50 dark:text-red-200">
+                    {saveError}
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </motion.div>
