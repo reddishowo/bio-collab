@@ -1137,9 +1137,7 @@ export default function LkpdWorkspacePage() {
               <span className="rounded border border-pastel-blue/30 bg-pastel-light px-2 py-0.5 font-mono text-[10px] font-bold tracking-widest text-pastel-dark dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
                 {activeGroupCode}
               </span>
-              <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
-                {isDemoMode ? "Mode Pratinjau" : `${members.length} Anggota`}
-              </span>
+              <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">{members.length} Anggota</span>
             </div>
           </div>
 
@@ -1236,13 +1234,7 @@ export default function LkpdWorkspacePage() {
               onAnswerChange={updateAnswer}
             />
 
-            {isDemoMode ? (
-              <div className="shrink-0 border-t border-slate-100 bg-white p-3 dark:border-slate-800 dark:bg-slate-950">
-                <p className="mx-auto max-w-3xl rounded-lg border border-pastel-blue/30 bg-pastel-light px-3 py-2 text-center text-xs font-bold text-pastel-dark dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100">
-                  Mode pratinjau dosen: LKPD dapat dibuka tanpa membuat kelompok. Jawaban yang diketik tidak disimpan.
-                </p>
-              </div>
-            ) : (
+            {!isDemoMode && (
               <div className="shrink-0 border-t border-slate-100 bg-white p-3 dark:border-slate-800 dark:bg-slate-950">
                 <motion.button
                   whileTap={{ scale: 0.98 }}
