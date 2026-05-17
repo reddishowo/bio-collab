@@ -4,7 +4,7 @@ import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { BookOpen, CalendarDays, LibraryBig, LogOut, Moon, Sun, Users, Video, X } from "lucide-react";
+import { BookMarked, BookOpen, CalendarDays, GraduationCap, LibraryBig, LogOut, Moon, Sun, Users, Video, X } from "lucide-react";
 import { GroupProvider, useGroupSession } from "@/components/GroupContext";
 
 const meetingItems = [
@@ -86,6 +86,14 @@ function SidebarContent({ isDark, onToggleTheme }: { isDark: boolean; onToggleTh
             </Link>
           );
         })}
+
+        <p className="mb-2 mt-6 px-2 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Tentang</p>
+        <Link href="/daftar-rujukan" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors font-medium ${pathname === '/daftar-rujukan' ? 'bg-pastel-dark text-white shadow-md dark:bg-slate-700' : 'hover:bg-pastel-blue/10 hover:text-pastel-dark dark:hover:bg-slate-900 dark:hover:text-white'}`}>
+          <BookMarked size={18} /> Daftar Rujukan
+        </Link>
+        <Link href="/daftar-pengembang" className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors font-medium ${pathname === '/daftar-pengembang' ? 'bg-pastel-dark text-white shadow-md dark:bg-slate-700' : 'hover:bg-pastel-blue/10 hover:text-pastel-dark dark:hover:bg-slate-900 dark:hover:text-white'}`}>
+          <GraduationCap size={18} /> Profil Pengembang
+        </Link>
       </nav>
 
       {userState && (
@@ -120,6 +128,7 @@ function SidebarContent({ isDark, onToggleTheme }: { isDark: boolean; onToggleTh
 
 function MobileBottomNav({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: () => void }) {
   const [isMeetingOpen, setIsMeetingOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { userState } = useGroupSession();
@@ -167,6 +176,54 @@ function MobileBottomNav({ isDark, onToggleTheme }: { isDark: boolean; onToggleT
         </div>
       )}
 
+      {isAboutOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/25 backdrop-blur-sm md:hidden" onClick={() => setIsAboutOpen(false)}>
+          <motion.div
+            initial={{ y: 32, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 32, opacity: 0 }}
+            className="absolute inset-x-3 bottom-24 rounded-3xl bg-white p-4 shadow-2xl dark:bg-slate-900"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-wider text-pastel-dark dark:text-slate-300">Tentang</p>
+                <h2 className="text-lg font-black text-slate-800 dark:text-slate-100">Informasi Modul</h2>
+              </div>
+              <button type="button" onClick={() => setIsAboutOpen(false)} className="rounded-full bg-slate-100 p-2 text-slate-500 dark:bg-slate-800 dark:text-slate-300">
+                <X size={18} />
+              </button>
+            </div>
+            <div className="grid gap-2">
+              <Link
+                href="/daftar-rujukan"
+                onClick={() => setIsAboutOpen(false)}
+                className={`flex items-center gap-3 rounded-2xl border p-3 text-left transition-colors ${
+                  pathname === "/daftar-rujukan" ? "border-pastel-dark bg-pastel-light text-pastel-dark dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" : "border-slate-100 bg-white text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                }`}
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-pastel-dark text-white">
+                  <BookMarked size={17} />
+                </span>
+                <span className="text-sm font-bold">Daftar Rujukan</span>
+              </Link>
+              <Link
+                href="/daftar-pengembang"
+                onClick={() => setIsAboutOpen(false)}
+                className={`flex items-center gap-3 rounded-2xl border p-3 text-left transition-colors ${
+                  pathname === "/daftar-pengembang" ? "border-pastel-dark bg-pastel-light text-pastel-dark dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100" : "border-slate-100 bg-white text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300"
+                }`}
+              >
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-pastel-dark text-white">
+                  <GraduationCap size={18} />
+                </span>
+                <span className="text-sm font-bold">Daftar Pengembang</span>
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-2 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[0_-8px_24px_rgba(15,23,42,0.08)] backdrop-blur dark:border-slate-800 dark:bg-slate-950/95 md:hidden">
         {userState && (
           <div className="mx-auto mb-2 flex max-w-md items-center justify-between rounded-2xl bg-pastel-light px-3 py-2 dark:bg-slate-900">
@@ -174,7 +231,7 @@ function MobileBottomNav({ isDark, onToggleTheme }: { isDark: boolean; onToggleT
             <span className="ml-2 rounded-lg bg-white px-2 py-1 font-mono text-xs font-black tracking-widest text-pastel-dark dark:bg-slate-800 dark:text-slate-100">{userState.groupCode}</span>
           </div>
         )}
-        <div className="mx-auto grid max-w-md grid-cols-[1fr_1fr_1fr_1fr_auto] gap-1">
+        <div className="mx-auto grid max-w-md grid-cols-[1fr_1fr_1fr_1fr_1fr_auto] gap-1">
           <Link
             href="/pendahuluan"
             className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl px-1 text-[11px] font-bold transition-colors ${
@@ -212,6 +269,16 @@ function MobileBottomNav({ isDark, onToggleTheme }: { isDark: boolean; onToggleT
             <CalendarDays size={20} />
             <span className="leading-none">Pertemuan</span>
           </button>
+          <button
+            type="button"
+            onClick={() => setIsAboutOpen(true)}
+            className={`flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl px-1 text-[11px] font-bold transition-colors ${
+              pathname === "/daftar-rujukan" || pathname === "/daftar-pengembang" ? "bg-pastel-dark text-white shadow-sm dark:bg-slate-700" : "text-slate-500 hover:bg-pastel-light hover:text-pastel-dark dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
+            }`}
+          >
+            <BookMarked size={20} />
+            <span className="leading-none">Tentang</span>
+          </button>
           <ThemeToggle compact isDark={isDark} onToggle={onToggleTheme} />
         </div>
       </nav>
@@ -227,7 +294,15 @@ function ModuleShell({ children }: { children: React.ReactNode }) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    if (!userState && pathname !== "/lkpd" && pathname !== "/pendahuluan" && pathname !== "/materi-bakteri" && pathname !== "/video-pembelajaran") {
+    if (
+      !userState &&
+      pathname !== "/lkpd" &&
+      pathname !== "/pendahuluan" &&
+      pathname !== "/materi-bakteri" &&
+      pathname !== "/video-pembelajaran" &&
+      pathname !== "/daftar-rujukan" &&
+      pathname !== "/daftar-pengembang"
+    ) {
       router.replace("/lkpd");
     }
   }, [pathname, router, userState]);
