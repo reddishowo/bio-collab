@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* Palet Biru Pastel & Tema Biologi */
   --color-pastel-blue: #A7C7E7;    /* Biru pastel utama */
@@ -12,4 +14,9 @@
 body {
   background-color: var(--color-pastel-light);
   color: #1e293b; /* slate-800 */
+}
+
+html.dark body {
+  background-color: #0f172a;
+  color: #e2e8f0;
 }

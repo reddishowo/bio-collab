@@ -66,7 +66,7 @@ export default function Home() {
           </motion.h2>
 
           <motion.h1 variants={itemVariants} className="mb-4 text-3xl font-extrabold leading-tight text-slate-800 sm:text-4xl md:text-5xl">
-            E-Modul Biologi <br />
+            E-Modul Biologi (Kelas X)<br />
             <span className="bg-linear-to-r from-pastel-dark to-pastel-blue bg-clip-text text-transparent">
               Berbasis OE-C
             </span>

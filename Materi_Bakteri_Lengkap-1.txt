@@ -1,0 +1,76 @@
+﻿MATERI PEMBELAJARAN
+BAKTERI
+Biologi Kelas X SMA/MA  |  Kurikulum 2013  |  Materi Lengkap + Glosarium
+BAB 1 - Pengertian dan Ciri-Ciri Bakteri
+A. Pengertian Bakteri
+Bakteri adalah organisme prokariotik bersel tunggal (uniseluler) yang tidak memiliki membran inti (nukleus sejati). Bakteri merupakan kelompok makhluk hidup yang paling banyak jumlahnya di bumi dan dapat ditemukan di hampir semua lingkungan, mulai dari tanah, air, udara, tubuh manusia, hingga lingkungan ekstrem seperti kawah vulkanik dan es kutub.
+
+B. Ciri-Ciri Umum Bakteri
+• Bersifat prokariotik - tidak memiliki membran inti sel.
+• Berukuran sangat kecil, berkisar antara 0,1 - 10 mikrometer (µm).
+• Hidup soliter (tunggal) maupun berkoloni (berkelompok).
+• Dinding sel tersusun dari peptidoglikan.
+• Reproduksi utama secara aseksual melalui pembelahan biner.
+• Dapat membentuk endospora saat kondisi lingkungan tidak menguntungkan.
+• Memiliki materi genetik berupa DNA sirkuler yang terletak di nukleoid.
+
+C. Bentuk-Bentuk Bakteri
+Berdasarkan bentuknya, bakteri dibagi menjadi tiga kelompok utama:
+
+BentukVariasiContoh SpesiesKokus (bulat)Monococcus, Diplococcus, Streptococcus, Staphylococcus, Tetracoccus, SarcinaStreptococcus pyogenes, Staphylococcus aureusBasil (batang)Monobasil, Diplobasil, StreptobasilBacillus anthracis, Escherichia coliSpirilum (spiral)Spiral longgar (spirilum), Spiral rapat (spirochaeta), Koma (vibrio)Vibrio cholerae, Treponema pallidum
+BAB 2 - Struktur Sel Bakteri
+A. Struktur Utama (Selalu Ada)
+StrukturFungsiDinding selTersusun dari peptidoglikan; memberi bentuk dan perlindungan pada sel bakteri.Membran plasmaLapisan fosfolipid bilayer yang mengatur keluar masuknya zat dari dan ke dalam sel.SitoplasmaCairan koloid tempat berlangsungnya reaksi metabolisme sel.Nukleoid (DNA)DNA sirkuler tanpa membran pembungkus, berfungsi sebagai materi genetik utama.RibosomOrganel terkecil untuk sintesis protein, tersusun dari subunit 30S dan 50S.
+B. Struktur Tambahan (Tidak Selalu Ada)
+StrukturFungsiKapsulLapisan lendir di luar dinding sel; melindungi bakteri dari fagositosis dan kekeringan.FlagelAlat gerak berupa cambuk; membantu bakteri bergerak menuju atau menjauhi rangsang.Pilus / FimbriaeRambut-rambut halus di permukaan sel; berfungsi sebagai alat perlekatan dan konjugasi.PlasmidDNA melingkar kecil di luar kromosom; sering membawa gen resistensi antibiotik.EndosporaBentuk dorman yang tahan panas, kekeringan, dan bahan kimia; dibentuk saat kondisi buruk.MesosomLekukan membran plasma; berperan dalam respirasi dan pembelahan sel.
+💡 Perbedaan Gram Positif dan Gram Negatif
+• Gram positif: dinding sel tebal (20-80 nm peptidoglikan), berwarna ungu saat pewarnaan Gram. Contoh: Staphylococcus aureus, Bacillus subtilis.
+• Gram negatif: dinding sel tipis (2-7 nm peptidoglikan) + membran luar lipopolisakarida, berwarna merah/merah muda. Contoh: Escherichia coli, Salmonella typhi.
+BAB 3 - Reproduksi Bakteri
+A. Reproduksi Aseksual - Pembelahan Biner
+Cara reproduksi utama bakteri. Satu sel membelah menjadi dua sel anak yang identik. Dalam kondisi ideal, bakteri dapat membelah setiap 20 menit, sehingga dalam 7 jam satu sel bisa menghasilkan lebih dari 2 juta keturunan.
+
+B. Reproduksi Paraseksual (Transfer Gen)
+Bakteri tidak bereproduksi secara seksual, tetapi dapat bertukar materi genetik melalui tiga mekanisme berikut:
+
+MekanismeCara KerjaContohKonjugasiTransfer DNA dari sel donor ke sel resipien melalui pilus seks (jembatan sitoplasma).Resistensi antibiotik pada StaphylococcusTransformasiPenyerapan fragmen DNA bebas dari lingkungan sekitar ke dalam sel bakteri.Streptococcus pneumoniaeTransduksiTransfer DNA dari satu bakteri ke bakteri lain melalui perantara virus bakteriofag.Salmonella typhi
+⚠️ Kaitan dengan Resistensi Antibiotik
+• Transfer gen antar bakteri (terutama konjugasi) menjadi penyebab utama penyebaran resistensi antibiotik.
+• Gen resistensi umumnya dibawa oleh plasmid yang berpindah dari bakteri resisten ke bakteri lain.
+• Inilah mengapa penggunaan antibiotik secara sembarangan sangat berbahaya.
+BAB 4 - Metabolisme Bakteri
+A. Berdasarkan Sumber Energi
+AutotrofHeterotrofFotoautotrof: energi dari cahaya, karbon dari CO₂. Contoh: Cyanobacteria.Fotohetetrof: energi dari cahaya, karbon dari senyawa organik. Contoh: Chlorobium.Kemoautotrof: energi dari oksidasi senyawa anorganik. Contoh: Nitrosomonas.Kemohetetrof: energi dan karbon dari senyawa organik. Contoh: E. coli, Salmonella.
+B. Berdasarkan Kebutuhan Oksigen
+• Aerob obligat: hanya dapat hidup dengan oksigen. Contoh: Mycobacterium tuberculosis.
+• Anaerob obligat: tidak dapat hidup dengan oksigen. Contoh: Clostridium tetani.
+• Anaerob fakultatif: dapat hidup dengan atau tanpa oksigen. Contoh: E. coli, Lactobacillus.
+• Mikroaerofilik: butuh oksigen kadar rendah. Contoh: Helicobacter pylori.
+
+BAB 5 - Peran Bakteri dalam Kehidupan
+A. Bakteri Menguntungkan
+BidangNama BakteriPeranPertanianRhizobium leguminosarumFiksasi nitrogen - mengubah N₂ menjadi NH₃ di akar tanaman legum.PertanianAzotobacter chroococcumFiksasi nitrogen bebas di tanah, meningkatkan kesuburan tanah.PanganLactobacillus bulgaricusFermentasi susu menjadi yogurt dan keju.PanganAcetobacter xylinumFermentasi air nanas/kelapa menjadi nata de pina/nata de coco.PanganAcetobacter acetiMengubah etanol menjadi asam asetat (cuka makanan).KesehatanEscherichia coliMenghasilkan vitamin K dan B12 di usus besar manusia.IndustriE. coli (rekayasa genetika)Produksi insulin, hormon pertumbuhan, dan antibiotik.LingkunganPseudomonas putidaBioremediasi - mengurai limbah dan polutan organik.LingkunganMethanobacteriumMenghasilkan biogas (metana) dari limbah organik.
+B. Bakteri Merugikan (Patogen)
+PenyakitBakteri PenyebabCara PenularanPencegahanTuberkulosis (TBC)Mycobacterium tuberculosisUdara / dropletVaksin BCG, antibiotikTifusSalmonella typhiMakanan/minuman terkontaminasiVaksin, antibiotikKoleraVibrio choleraeAir/makanan terkontaminasiSanitasi, rehidrasi oralDiareEscherichia coli O157:H7Makanan terkontaminasiSanitasi, antibiotikTetanusClostridium tetaniLuka terbukaVaksin TT, antibiotikPneumoniaStreptococcus pneumoniaeUdara / dropletVaksin, antibiotikGonoreNeisseria gonorrhoeaeKontak seksualAntibiotikLepraMycobacterium lepraeKontak langsung jangka panjangMulti Drug Therapy (MDT)
+BAB 6 - Bioteknologi Berbasis Bakteri
+A. Pengertian Bioteknologi
+Bioteknologi adalah pemanfaatan organisme hidup (atau bagian-bagiannya) untuk menghasilkan produk atau jasa yang bermanfaat bagi manusia. Bakteri menjadi agen bioteknologi yang paling banyak digunakan karena mudah dimanipulasi, cepat berkembang biak, dan dapat menghasilkan berbagai senyawa penting.
+
+B. Bioteknologi Konvensional vs Modern
+KonvensionalModernMenggunakan proses fermentasi alami.Menggunakan rekayasa genetika (DNA rekombinan).Teknologi sederhana, tidak memerlukan alat canggih.Teknologi tinggi, memerlukan laboratorium canggih.Sudah dikenal sejak ribuan tahun lalu.Berkembang pesat sejak abad ke-20.Contoh: pembuatan yogurt, tempe, kecap, nata de coco.Contoh: produksi insulin, vaksin rekombinan, antibiotik.
+C. Produk Bioteknologi Berbasis Bakteri
+BidangProdukBakteriMekanismePanganYogurt, keju, kecap, nata de pinaLactobacillus, Acetobacter xylinumFermentasiPertanianPupuk hayati, pestisida biologisRhizobium, Azotobacter, Bacillus thuringiensisFiksasi N₂, produksi toksin insektisidaKesehatanInsulin, vaksin, antibiotikE. coli (rekayasa), StreptomycesRekayasa genetika, fermentasiLingkunganBiogas, bioplastik, bioremediasiMethanobacterium, PseudomonasFermentasi anaerobik, degradasi polutan
+D. Fermentasi Nata de Pina
+Nata de pina adalah produk bioteknologi konvensional yang terbuat dari fermentasi sari nanas oleh bakteri Acetobacter xylinum. Bakteri ini mengoksidasi glukosa dan fruktosa dalam sari nanas menjadi selulosa ekstraseluler yang membentuk lapisan kenyal berwarna putih kekuningan.
+
+🍍 Faktor yang Memengaruhi Kualitas Nata de Pina
+• Kadar gula: konsentrasi gula 5-10% optimal untuk pertumbuhan Acetobacter xylinum.
+• pH: kondisi asam (pH 3-4) dengan penambahan asam asetat mendukung pertumbuhan bakteri.
+• Suhu inkubasi: suhu 28-30°C merupakan suhu optimal fermentasi.
+• Konsentrasi starter: starter 10% dari volume media memberikan hasil terbaik.
+• Kebersihan alat: kontaminasi mikroorganisme lain dapat menghambat pembentukan nata.
+GLOSARIUM
+Berikut adalah kumpulan istilah penting yang digunakan dalam materi bakteri:
+
+IstilahDefinisiAerobKondisi yang memerlukan oksigen untuk kelangsungan hidup atau proses metabolisme.AnaerobKondisi yang tidak memerlukan oksigen; bahkan pada beberapa bakteri, oksigen bersifat racun.AntibiotikSenyawa yang dihasilkan oleh mikroorganisme atau dibuat sintetis yang mampu menghambat atau membunuh bakteri.AutotrofOrganisme yang dapat membuat makanannya sendiri dari sumber karbon anorganik (CO₂).BakteriOrganisme prokariotik bersel tunggal yang tidak memiliki membran inti, termasuk dalam Domain Bacteria.BioremediasiPenggunaan organisme hidup (terutama bakteri) untuk mendegradasi atau mendetoksifikasi polutan di lingkungan.BioteknologiPemanfaatan organisme hidup atau komponen-komponennya untuk menghasilkan produk atau jasa yang bermanfaat.Dinding selLapisan kaku di luar membran plasma bakteri yang tersusun dari peptidoglikan, berfungsi memberi bentuk dan perlindungan.DNA rekombinanDNA yang dibentuk dengan menggabungkan urutan DNA dari dua atau lebih sumber yang berbeda melalui rekayasa genetika.EndosporaStruktur dorman yang tahan terhadap panas, kekeringan, dan bahan kimia; dibentuk bakteri saat kondisi lingkungan tidak menguntungkan.FermentasiProses metabolisme anaerobik yang mengubah senyawa organik menjadi produk yang lebih sederhana dengan bantuan mikroorganisme.Fiksasi nitrogenProses pengubahan nitrogen bebas (N₂) di atmosfer menjadi amonia (NH₃) yang dapat digunakan oleh tumbuhan.FlagelStruktur berbentuk cambuk yang berfungsi sebagai alat gerak pada bakteri.Gram negatifKelompok bakteri yang dinding selnya tipis dan memiliki membran luar; berwarna merah/merah muda pada pewarnaan Gram.Gram positifKelompok bakteri yang dinding selnya tebal (peptidoglikan); berwarna ungu pada pewarnaan Gram.HeterotrofOrganisme yang mendapatkan energi dan karbon dari senyawa organik yang sudah ada.KapsulLapisan lendir yang mengelilingi dinding sel bakteri tertentu; berfungsi melindungi dari fagositosis dan kekeringan.KonjugasiTransfer materi genetik langsung dari satu bakteri ke bakteri lain melalui pilus seks atau jembatan sitoplasma.Membran plasmaLapisan fosfolipid bilayer yang membatasi sel dan mengatur perpindahan zat masuk dan keluar sel.NukleoidDaerah di sitoplasma bakteri tempat DNA kromosom sirkuler berada; tidak dikelilingi membran.PatogenOrganisme atau agen yang mampu menyebabkan penyakit pada organisme lain.PeptidoglikanPolimer yang menyusun dinding sel bakteri; tersusun dari rantai polisakarida yang dihubungkan oleh peptida pendek.PilusRambut-rambut halus di permukaan sel bakteri yang berfungsi sebagai alat perlekatan dan transfer DNA saat konjugasi.PlasmidDNA sirkuler kecil yang terdapat di luar kromosom utama bakteri; sering membawa gen resistensi antibiotik.ProkariotikTipe sel yang tidak memiliki membran inti (nukleus sejati); termasuk bakteri dan arkea.Resistensi antibiotikKemampuan bakteri untuk bertahan hidup dan berkembang biak meskipun terpapar antibiotik.RibosomOrganel sel yang berfungsi sebagai tempat sintesis protein; pada bakteri tersusun dari subunit 30S dan 50S.SitoplasmaCairan koloid di dalam sel tempat berlangsungnya berbagai reaksi metabolisme.TransduksiTransfer DNA dari satu bakteri ke bakteri lain melalui perantara virus bakteriofag.TransformasiProses masuknya DNA bebas dari lingkungan ke dalam sel bakteri.UniselulerOrganisme yang hanya terdiri atas satu sel.VaksinSediaan biologis yang mengandung antigen untuk merangsang sistem imun agar membentuk kekebalan terhadap penyakit tertentu.VibrioBentuk bakteri menyerupai koma atau setengah spiral pendek; contoh: Vibrio cholerae penyebab kolera.
+Materi Bakteri - Biologi Kelas X SMA/MA | Kurikulum 2013 | Nafisa Syafaqoh

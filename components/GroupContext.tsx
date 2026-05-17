@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useMemo, useSyncExternalStore, ReactNode } from "react";
 
 interface UserState {
   userName: string;
@@ -15,31 +15,48 @@ interface GroupContextType {
 }
 
 const GroupContext = createContext<GroupContextType | undefined>(undefined);
+const SESSION_KEY = "biocollab_session";
+const SESSION_EVENT = "biocollab-session";
+
+function subscribeToSession(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(SESSION_EVENT, callback);
+
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(SESSION_EVENT, callback);
+  };
+}
+
+function getSessionSnapshot() {
+  return localStorage.getItem(SESSION_KEY);
+}
+
+function getServerSessionSnapshot() {
+  return null;
+}
 
 export function GroupProvider({ children }: { children: ReactNode }) {
-  const [userState, setUserState] = useState<UserState | null>(() => {
-    if (typeof window === "undefined") return null;
-
-    const savedSession = localStorage.getItem("biocollab_session");
-    if (!savedSession) return null;
+  const sessionSnapshot = useSyncExternalStore(subscribeToSession, getSessionSnapshot, getServerSessionSnapshot);
+  const userState = useMemo<UserState | null>(() => {
+    if (!sessionSnapshot) return null;
 
     try {
-      return JSON.parse(savedSession);
+      return JSON.parse(sessionSnapshot);
     } catch {
-      localStorage.removeItem("biocollab_session");
       return null;
     }
-  });
+  }, [sessionSnapshot]);
 
   const loginSession = (userName: string, groupCode: string, groupName: string) => {
     const newState = { userName, groupCode, groupName };
-    setUserState(newState);
-    localStorage.setItem("biocollab_session", JSON.stringify(newState)); // Simpan ke memori browser
+    localStorage.setItem(SESSION_KEY, JSON.stringify(newState)); // Simpan ke memori browser
+    window.dispatchEvent(new Event(SESSION_EVENT));
   };
 
   const logoutSession = () => {
-    setUserState(null);
-    localStorage.removeItem("biocollab_session"); // Hapus dari memori browser
+    localStorage.removeItem(SESSION_KEY); // Hapus dari memori browser
+    window.dispatchEvent(new Event(SESSION_EVENT));
   };
 
   return (
