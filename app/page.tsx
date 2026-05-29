@@ -73,7 +73,7 @@ export default function Home() {
           </motion.h1>
 
           <motion.p variants={itemVariants} className="mx-auto mb-8 max-w-xl text-sm leading-7 text-slate-600 sm:text-lg">
-            Tingkatkan kemampuan berpikir kreatif dan kolaborasi melalui pendekatan Open-Ended Collaboration (OE-C).
+            Tingkatkan kemampuan Literasi Sains melalui pendekatan Open-Ended Collaboration (OE-C).
           </motion.p>
 
           <motion.div variants={itemVariants}>
